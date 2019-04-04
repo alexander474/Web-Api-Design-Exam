@@ -14,11 +14,14 @@ module.exports = {
                 use: {
                     loader: "babel-loader"
                 }
+            },{
+                test: /\.(css|less)$/,
+                use: ["style-loader", "css-loader"]
             }
         ]
     },
     resolve: {
-        extensions: ['.js', '.jsx'],
+        extensions: ['.js', '.jsx', '.css'],
         alias: {
             ['~']: path.resolve(__dirname + '/src')
         }

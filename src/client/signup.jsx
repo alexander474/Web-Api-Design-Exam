@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button, Form, FormGroup, Label, Col} from 'reactstrap';
 import {withRouter} from 'react-router-dom'
 
 class SignUp extends React.Component{
@@ -26,8 +27,8 @@ class SignUp extends React.Component{
         this.setState({confirm: event.target.value, errorMsg: null});
     };
 
-    doSignUp = async () => {
-
+    doSignUp = async (e) => {
+        e.preventDefault();
         const {userId, password, confirm} = this.state;
 
         if(confirm !== password){
@@ -72,10 +73,10 @@ class SignUp extends React.Component{
 
     render(){
 
-        let error = <div></div>;
+        let error = "";
         if(this.state.errorMsg !== null){
             //TODO css
-            error = <div className="errorMsg"><p>{this.state.errorMsg}</p></div>
+            error = this.state.errorMsg
         }
 
         let confirmMsg = "Ok";
@@ -84,31 +85,43 @@ class SignUp extends React.Component{
         }
 
         return(
-            <div>
-                <div>
-                    <p>User Id:</p>
+            <Form onSubmit={(e) => this.doSignUp(e)}>
+                <FormGroup row>
+                    <Label for="exampleText" sm={2}>username</Label>
+                    <Col sm={10}>
                     <input type="text"
+                           name="state"
+                           id="exampleState"
                            value={this.state.userId}
                            onChange={this.onUserIdChange}/>
-                </div>
-                <div>
-                    <p>Password:</p>
+                    </Col>
+                </FormGroup>
+                <FormGroup row>
+                    <Label for="exampleText" sm={2}>password</Label>
+                    <Col sm={10}>
                     <input type="password"
                            value={this.state.password}
                            onChange={this.onPasswordChange}/>
-                </div>
-                <div>
-                    <p>Confirm:</p>
+                    </Col>
+                </FormGroup>
+                <FormGroup row>
+                    <Label for="exampleText" sm={2}>Confirm</Label>
+                    <Col sm={10}>
                     <input type="password"
                            value={this.state.confirm}
                            onChange={this.onConfirmChange}/>
-                    <div>{confirmMsg}</div>
-                </div>
-
-                {error}
-
-                <div className="btn" onClick={this.doSignUp}>Sign Up</div>
-            </div>
+                    </Col>
+                </FormGroup>
+                <FormGroup row>
+                    <Col sm={10}>
+                    <Label for="exampleText" >{confirmMsg}</Label>
+                    </Col>
+                    <Col sm={10}>
+                        <Label for="exampleText" >{error}</Label>
+                    </Col>
+                </FormGroup>
+            <Button>Submit</Button>
+        </Form>
         );
     }
 }
