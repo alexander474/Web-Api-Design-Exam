@@ -5,8 +5,6 @@ import {BrowserRouter, Switch, Route} from 'react-router-dom';
 import {Home} from "./home";
 import Login from "./login";
 import SignUp from "./signup";
-import {AiMatch} from "./connect4/ai-match";
-import {OnlineMatch} from "./connect4/online-match";
 import HeaderBar from "./headerbar";
 
 class App extends React.Component {
@@ -103,10 +101,7 @@ class App extends React.Component {
                     <HeaderBar userId={this.state.userId}
                                updateLoggedInUserId={this.updateLoggedInUserId}/>
                     <Switch>
-                        <Route exact path="/match/ai" component={AiMatch}/>
-                        <Route exact path="/match/online"
-                               render={props => <OnlineMatch {...props} userId={this.state.userId}
-                                                             updateLoggedInUserId={this.updateLoggedInUserId}/>}/>
+
                         <Route exact path="/login"
                                render={props => <Login {...props}
                                                        userId={this.state.userId}

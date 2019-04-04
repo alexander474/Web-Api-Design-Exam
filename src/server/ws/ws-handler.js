@@ -1,8 +1,7 @@
 const express_ws = require('express-ws');
 
 const Tokens = require('./tokens');
-const ActivePlayers = require('../online/active-players');
-const OngoingMatches = require('../online/ongoing-matches');
+
 
 let ews;
 
@@ -46,9 +45,7 @@ function init(app) {
         //close is treated specially
         socket.on('close', () => {
 
-            const userId = ActivePlayers.getUser(socket.id);
 
-            ActivePlayers.removeSocket(socket.id);
 
             /*
                 if a user is leaving, any of its ongoing matches should be
@@ -56,7 +53,6 @@ function init(app) {
                 If we do not do this, a user could cheat by just quitting
                 the connection when it sees that it is losing a match
              */
-            OngoingMatches.forfeit(userId);
 
             console.log("User '" + userId + "' is disconnected.");
         });
