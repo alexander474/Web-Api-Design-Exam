@@ -40,14 +40,14 @@ class Header extends React.Component {
     this.props.history.push("/");
   };
 
-  renderLoggedIn(userId) {
+  renderLoggedIn() {
     return (
         <Nav className="ml-auto" navbar>
           <NavItem>
-          < NavLink href='/One'>One</NavLink>
+          < NavLink href='/Menu'>Menu</NavLink>
           </NavItem>
           <NavItem>
-            <NavLink href='/Two'>Two</NavLink>
+            <NavLink href='/chat'>chat</NavLink>
           </NavItem>
           <NavItem>
             <NavLink onClick={this.doLogout}>Logout</NavLink>
@@ -58,7 +58,7 @@ class Header extends React.Component {
 
 
 
-  renderNotLoggedIn() {
+  renderNotLoggedIn = () => {
     return (
         <Nav className="ml-auto" navbar>
           <NavItem>
@@ -73,7 +73,7 @@ class Header extends React.Component {
 
 
 
-  render() {
+  render = () => {
     const userId = this.props.userId;
 
     return (

@@ -1,12 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import {BrowserRouter, Switch, Route} from 'react-router-dom';
+import { Row, Col } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import {Home} from "./home";
 import Login from "./login";
 import SignUp from "./signup";
 import Header from "./header";
+import Chat from './Chat/chat';
+import Menu from './Menu/menu';
+
 
 class App extends React.Component {
 
@@ -86,6 +90,14 @@ class App extends React.Component {
                                render={props => <SignUp {...props}
                                                         userId={this.state.userId}
                                                         updateLoggedInUserId={this.updateLoggedInUserId}/>}/>
+                        <Route exact path="/chat"
+                               render={props => <Chat {...props}
+                                                        userId={this.state.userId}
+                                                        updateLoggedInUserId={this.updateLoggedInUserId}/>}/>
+                        <Route exact path="/menu"
+                               render={props => <Menu {...props}
+                                                      userId={this.state.userId}
+                                                      updateLoggedInUserId={this.updateLoggedInUserId}/>}/>
                         <Route exact path="/"
                                render={props => <Home {...props} userId={this.state.userId}/>}/>
                         <Route component={this.notFound}/>

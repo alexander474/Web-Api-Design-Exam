@@ -1,13 +1,16 @@
 const express_ws = require('express-ws');
-
+const WebSocket = require('ws');
 const Tokens = require('./tokens');
 
 
 let ews;
 
 function init(app) {
+    console.log("Setting up ws");
 
     ews = express_ws(app);
+    let counter = 0;
+    const messages = [];
 
     app.ws('/', function (socket, req) {
         console.log('Established a new WS connection');
@@ -16,66 +19,34 @@ function init(app) {
         socket.addMessageHandler = (topic, handler) => {socket.messageHandlers.set(topic, handler)};
         socket.addMessageHandler("login", handleLogin);
 
-        socket.on('message', (data) => {
+        ws.send(JSON.stringify(messages));
 
-            if (data === null || data === undefined) {
-                socket.send(JSON.stringify({topic: "update", error: "No payload provided"}));
-                return;
-            }
+        socket.on('message', (data) => {
+            console.log("Getting message"+JSON.stringify(data));
 
             const dto = JSON.parse(data);
+            const id = counter++;
+            const msg = {id: id, userId: dto.userId, text: dto.text};
 
-            const topic = dto.topic;
+            //add to our current local store
+            messages.push(msg);
 
-            if(topic === null || topic === undefined){
-                socket.send(JSON.stringify({topic: "update", error: "No defined topic"}));
-                return;
-            }
+            //do a broadcast to all existing clients
+            ews.getWss().clients.forEach((client) => {
+                if (client.readyState === WebSocket.OPEN) {
 
-            const handler = socket.messageHandlers.get(topic);
-
-            if(handler === null || handler === undefined){
-                socket.send(JSON.stringify({topic: "update", error: "Unrecognized topic: " + topic}));
-                return;
-            }
-
-            handler(dto, socket);
+                    client.send(JSON.stringify([msg]));
+                }
+            });
         });
 
-        //close is treated specially
         socket.on('close', () => {
-
-
-
-            /*
-                if a user is leaving, any of its ongoing matches should be
-                forfeit, which means that the opponent wins.
-                If we do not do this, a user could cheat by just quitting
-                the connection when it sees that it is losing a match
-             */
 
             console.log("User '" + userId + "' is disconnected.");
         });
     });
 }
 
-
-/*
-   WebSockets do not have a native concept of authentication.
-   As first WS message is over HTTP, we could re-use the same session cookies,
-   which will be sent together with the WS first request.
-   But there are some limitations with such approach.
-   You can see more details at:
-
-   https://devcenter.heroku.com/articles/websocket-security
-
-   Here, for simplicity, we use a general approach of token-based authentication.
-   Once the user is authenticated via regular HTTP protocol, then
-   it can query for a specific endpoint returning a token associated
-   with the logged in user.
-   Such token can then be sent as part of handshake when the first WS
-   message is sent.
-*/
 function handleLogin(dto, socket) {
 
     const token = dto.wstoken;
@@ -85,7 +56,6 @@ function handleLogin(dto, socket) {
         return;
     }
 
-    //token can be used only once to authenticate only a single socket
     const userId = Tokens.consumeToken(token);
 
     if (userId === null || userId === undefined) {
@@ -93,12 +63,6 @@ function handleLogin(dto, socket) {
         return;
     }
 
-    /*
-        if token was valid, then we can create an authenticated
-        association with the given user for that token and the
-        current socket
-     */
-    ActivePlayers.registerSocket(socket, userId);
 
     console.log("User '" + userId + "' is now connected with a websocket.");
 }

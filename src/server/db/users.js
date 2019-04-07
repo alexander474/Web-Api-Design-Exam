@@ -44,5 +44,10 @@ function resetAllUsers(){
     users.clear();
 }
 
+function initWithDefaultData(){
+    resetAllUsers();
+    createUser("a", "a");
+}
 
-module.exports = {getUser, verifyUser, createUser, resetAllUsers};
+
+module.exports = {getUser, verifyUser, createUser, resetAllUsers, initWithDefaultData};

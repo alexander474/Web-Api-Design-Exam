@@ -1,4 +1,4 @@
-const express = require('express')
+const express = require('express');
 const passport = require('passport');
 
 const Users = require('../db/users');
@@ -49,9 +49,9 @@ router.post('/wstoken', function (req, res) {
         return;
     }
 
-    const t = Tokens.createToken(req.user.id);
+    const token = Tokens.createToken(req.user.id);
 
-    res.status(201).json({wstoken: t});
+    res.status(201).json({wstoken: token});
 });
 
 /*

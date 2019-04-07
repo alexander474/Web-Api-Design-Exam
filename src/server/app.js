@@ -6,6 +6,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const path = require('path');
 
 const authApi = require('./routes/auth-api');
+const menuApi = require('./routes/menu-api');
 const Users = require('./db/users');
 
 const WsHandler = require('./ws/ws-handler');
@@ -27,8 +28,9 @@ app.use(session({
 }));
 
 
-//needed to server static files, like HTML, CSS and JS.
 app.use(express.static('public'));
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 passport.use(new LocalStrategy(
@@ -65,12 +67,11 @@ passport.deserializeUser(function (id, done) {
     }
 });
 
-app.use(passport.initialize());
-app.use(passport.session());
 
 
 //--- Routes -----------
 app.use('/api', authApi);
+app.use('/api', menuApi);
 
 //handling 404 for /api calls
 app.all('/api*', (req,res) => {
