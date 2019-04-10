@@ -1,8 +1,7 @@
 import React from 'react';
-import { Button, Form, FormGroup, Label, Col} from 'reactstrap';
 import {withRouter} from 'react-router-dom'
 
-class SignUp extends React.Component{
+export class SignUp extends React.Component{
 
     constructor(props){
         super(props);
@@ -27,8 +26,8 @@ class SignUp extends React.Component{
         this.setState({confirm: event.target.value, errorMsg: null});
     };
 
-    doSignUp = async (e) => {
-        e.preventDefault();
+    doSignUp = async () => {
+
         const {userId, password, confirm} = this.state;
 
         if(confirm !== password){
@@ -67,61 +66,54 @@ class SignUp extends React.Component{
         }
 
         this.setState({errorMsg: null});
-        this.props.updateLoggedInUserId(userId);
+        await this.props.fetchAndUpdateUserInfo();
         this.props.history.push('/');
     };
 
     render(){
 
-        let error = "";
+        let error = <div></div>;
         if(this.state.errorMsg !== null){
-            //TODO css
-            error = this.state.errorMsg
+            error = <div className="errorMsg"><p>{this.state.errorMsg}</p></div>
         }
 
         let confirmMsg = "Ok";
         if(this.state.confirm !== this.state.password){
-           confirmMsg = "Not matching";
+            confirmMsg = "Not matching";
         }
 
         return(
-            <Form onSubmit={(e) => this.doSignUp(e)}>
-                <FormGroup row>
-                    <Label for="exampleText" sm={2}>username</Label>
-                    <Col sm={10}>
+            <div>
+                <div>
+                    <p>User Id:</p>
                     <input type="text"
-                           name="state"
-                           id="exampleState"
                            value={this.state.userId}
-                           onChange={this.onUserIdChange}/>
-                    </Col>
-                </FormGroup>
-                <FormGroup row>
-                    <Label for="exampleText" sm={2}>password</Label>
-                    <Col sm={10}>
+                           onChange={this.onUserIdChange}
+                           id="userIdInput"
+                    />
+                </div>
+                <div>
+                    <p>Password:</p>
                     <input type="password"
                            value={this.state.password}
-                           onChange={this.onPasswordChange}/>
-                    </Col>
-                </FormGroup>
-                <FormGroup row>
-                    <Label for="exampleText" sm={2}>Confirm</Label>
-                    <Col sm={10}>
+                           onChange={this.onPasswordChange}
+                           id="passwordInput"
+                    />
+                </div>
+                <div>
+                    <p>Confirm:</p>
                     <input type="password"
                            value={this.state.confirm}
-                           onChange={this.onConfirmChange}/>
-                    </Col>
-                </FormGroup>
-                <FormGroup row>
-                    <Col sm={10}>
-                    <Label for="exampleText" >{confirmMsg}</Label>
-                    </Col>
-                    <Col sm={10}>
-                        <Label for="exampleText" >{error}</Label>
-                    </Col>
-                </FormGroup>
-            <Button>Submit</Button>
-        </Form>
+                           onChange={this.onConfirmChange}
+                           id="confirmInput"
+                    />
+                    <div>{confirmMsg}</div>
+                </div>
+
+                {error}
+
+                <div className="btn" onClick={this.doSignUp} id="signUpBtn">Sign Up</div>
+            </div>
         );
     }
 }

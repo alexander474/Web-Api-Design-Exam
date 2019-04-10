@@ -1,51 +1,36 @@
 import React from "react";
-import { Container, Row, Col } from 'reactstrap';
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 
-import Menu from "./Menu/menu"
 
 export class Home extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+    constructor(props) {
+        super(props);
+    }
+
+    componentDidMount() {
+        if(this.props.user) {
+            this.props.fetchAndUpdateUserInfo();
+        }
+    }
 
 
-  renderLoggedIn(userId){
-      return (
-          <div>
-              <Row>
-                  <Col>
-                      WELCOME {userId}
-                  </Col>
-              </Row>
-              <Row>
-                  <Col>
-                      <Menu/>
-                  </Col>
-              </Row>
-          </div>
-      );
-  }
+    render() {
+        const user = this.props.user;
+        const loggedIn = user !== null && user !== undefined;
 
-  renderNotLoggedIn(){
-        return (<Col>You need to login</Col>)
-  }
+        return (
+            <div>
+                {loggedIn ? (
+                    <div>
+                        <p>Homepage & you are logged in</p>
+                    </div>
+                ) : (
+                    <p>
+                        You need to log-in to start playing!
+                    </p>
+                )}
 
-
-  render() {
-      const userId = this.props.userId;
-      let display;
-      if(userId === null || userId === undefined){
-          display = this.renderNotLoggedIn();
-      }else{
-          display = this.renderLoggedIn(userId);
-      }
-    return (
-        <Container>
-          <Row>
-              {display}
-          </Row>
-        </Container>
-    );
-  }
+            </div>
+        );
+    }
 }

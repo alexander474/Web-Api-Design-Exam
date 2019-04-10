@@ -1,33 +1,28 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import {BrowserRouter, Switch, Route} from 'react-router-dom';
-import { Row, Col } from 'reactstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 import {Home} from "./home";
 import Login from "./login";
 import SignUp from "./signup";
 import Header from "./header";
-import Chat from './Chat/chat';
-import Menu from './Menu/menu';
-
 
 class App extends React.Component {
 
     constructor(props) {
         super(props);
-
         this.state = {
-            userId: null
+            user: null,
         };
     }
 
-    componentDidMount(){
-        this.checkIfAlreadyLoggedIn();
+    componentDidMount() {
+        this.fetchAndUpdateUserInfo();
     }
 
 
-    async checkIfAlreadyLoggedIn() {
+    fetchAndUpdateUserInfo = async () => {
 
         const url = "/api/user";
 
@@ -43,32 +38,32 @@ class App extends React.Component {
         }
 
         if (response.status === 401) {
-            this.updateLoggedInUserId(null);
+            //that is ok
+            this.updateLoggedInUser(null);
             return;
         }
 
         if (response.status !== 200) {
+            //TODO here could have some warning message in the page.
         } else {
             const payload = await response.json();
-            this.updateLoggedInUserId(payload.userId);
+            this.updateLoggedInUser(payload);
         }
     };
 
-    updateLoggedInUserId = (userId) => {
-        this.setState({userId: userId});
+    updateLoggedInUser = (user) => {
+        this.setState({user: user});
     };
 
 
     notFound() {
         return (
-            <Row>
-                <Col sm="12">
-                    <h2>NOT FOUND: 404</h2>
-                    <p>
-                        ERROR: the page you requested in not available.
-                    </p>
-                </Col>
-            </Row>
+            <div>
+                <h2>NOT FOUND: 404</h2>
+                <p>
+                    ERROR: the page you requested in not available.
+                </p>
+            </div>
         );
     };
 
@@ -78,28 +73,19 @@ class App extends React.Component {
         return (
             <BrowserRouter>
                 <div>
-                    <Header userId={this.state.userId}
-                            updateLoggedInUserId={this.updateLoggedInUserId}/>
-
+                    <Header user={this.state.user}
+                            updateLoggedInUser={this.updateLoggedInUser}/>
                     <Switch>
                         <Route exact path="/login"
                                render={props => <Login {...props}
-                                                       userId={this.state.userId}
-                                                       updateLoggedInUserId={this.updateLoggedInUserId}/>}/>
+                                                       fetchAndUpdateUserInfo={this.fetchAndUpdateUserInfo}/>}/>
                         <Route exact path="/signup"
                                render={props => <SignUp {...props}
-                                                        userId={this.state.userId}
-                                                        updateLoggedInUserId={this.updateLoggedInUserId}/>}/>
-                        <Route exact path="/chat"
-                               render={props => <Chat {...props}
-                                                        userId={this.state.userId}
-                                                        updateLoggedInUserId={this.updateLoggedInUserId}/>}/>
-                        <Route exact path="/menu"
-                               render={props => <Menu {...props}
-                                                      userId={this.state.userId}
-                                                      updateLoggedInUserId={this.updateLoggedInUserId}/>}/>
+                                                        fetchAndUpdateUserInfo={this.fetchAndUpdateUserInfo}/>}/>
                         <Route exact path="/"
-                               render={props => <Home {...props} userId={this.state.userId}/>}/>
+                               render={props => <Home {...props}
+                                                      user={this.state.user}
+                                                      fetchAndUpdateUserInfo={this.fetchAndUpdateUserInfo}/>}/>
                         <Route component={this.notFound}/>
                     </Switch>
                 </div>
@@ -108,4 +94,4 @@ class App extends React.Component {
     }
 }
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(<App/>, document.getElementById("root"));

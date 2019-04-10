@@ -1,9 +1,8 @@
 import React from 'react';
 import {Link, withRouter} from 'react-router-dom';
-import {Button, Col, Form, FormGroup, Label} from "reactstrap";
 
 
-class Login extends React.Component{
+export class Login extends React.Component{
 
     constructor(props){
         super(props);
@@ -23,8 +22,7 @@ class Login extends React.Component{
         this.setState({password: event.target.value});
     };
 
-    doLogin = async (e) => {
-        e.preventDefault();
+    doLogIn = async () => {
         const {userId, password} = this.state;
 
         const url = "/api/login";
@@ -58,47 +56,43 @@ class Login extends React.Component{
         }
 
         this.setState({errorMsg: null});
-        this.props.updateLoggedInUserId(userId);
+        await this.props.fetchAndUpdateUserInfo();
         this.props.history.push('/');
     };
 
+
     render(){
 
-        let error = "";
+        let error = <div></div>;
         if(this.state.errorMsg !== null){
-            //TODO css
-            error = this.state.errorMsg
+            error = <div className="errorMsg"><p>{this.state.errorMsg}</p></div>
         }
 
 
         return(
-            <Form onSubmit={(e) => this.doLogin(e)}>
-                <FormGroup row>
-                    <Label for="exampleText" sm={2}>username</Label>
-                    <Col sm={10}>
-                        <input type="text"
-                               name="state"
-                               id="exampleState"
-                               value={this.state.userId}
-                               onChange={this.onUserIdChange}/>
-                    </Col>
-                </FormGroup>
-                <FormGroup row>
-                    <Label for="exampleText" sm={2}>password</Label>
-                    <Col sm={10}>
-                        <input type="password"
-                               value={this.state.password}
-                               onChange={this.onPasswordChange}/>
-                    </Col>
-                </FormGroup>
-                <FormGroup row>
-                    <Col sm={10}>
-                        <Label for="exampleText" >{error}</Label>
-                    </Col>
-                </FormGroup>
-                <Button>Login</Button>
-            </Form>
-        );
+            <div>
+                <div>
+                    <p>User Id:</p>
+                    <input type="text"
+                           value={this.state.userId}
+                           onChange={this.onUserIdChange}
+                           id="userIdInput"
+                    />
+                </div>
+                <div>
+                    <p>Password:</p>
+                    <input type="password"
+                           value={this.state.password}
+                           onChange={this.onPasswordChange}
+                           id="passwordInput"
+                    />
+                </div>
+
+                {error}
+
+                <div className="btn" onClick={this.doLogIn} id="loginBtn">Log In</div>
+                <Link to={"/signup"}>Register</Link>
+            </div>);
     }
 }
 

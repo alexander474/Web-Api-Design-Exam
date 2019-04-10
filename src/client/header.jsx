@@ -1,98 +1,82 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
-import {
-  Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavLink,
-    Row, Col, NavItem
-} from 'reactstrap';
+import { Link, withRouter } from "react-router-dom";
 
-class Header extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isOpen: false,
-    }
-  }
-
-  toggle = () => {
-    this.setState({
-      isOpen: !this.state.isOpen
-    });
-  };
-
-  doLogout = async () => {
-    const url = "/api/logout";
-
-    let response;
-
-    try {
-      response = await fetch(url, { method: "post" });
-    } catch (err) {
-      alert("Failed to connect to server: " + err);
-      return;
+export class Header extends React.Component {
+    constructor(props) {
+        super(props);
     }
 
-    if (response.status !== 204) {
-      alert("Error when connecting to server: status code " + response.status);
-      return;
+    doLogout = async () => {
+        const url = "/api/logout";
+
+        let response;
+
+        try {
+            response = await fetch(url, { method: "post" });
+        } catch (err) {
+            alert("Failed to connect to server: " + err);
+            return;
+        }
+
+        if (response.status !== 204) {
+            alert("Error when connecting to server: status code " + response.status);
+            return;
+        }
+
+        this.props.updateLoggedInUser(null);
+        this.props.history.push("/");
+    };
+
+    renderLoggedIn(userId) {
+        return (
+            <div className="msgDiv">
+                <h3 className="notLoggedInMsg">
+                    Welcome {userId}
+                    !!!
+                </h3>
+
+                <div className="btn btnPartHeader" onClick={this.doLogout} id="logoutBtnId">
+                    Logout
+                </div>
+            </div>
+        );
     }
 
-    this.props.updateLoggedInUserId(null);
-    this.props.history.push("/");
-  };
+    renderNotLoggedIn() {
+        return (
+            <div className="msgDiv">
+                <div className="notLoggedInMsg">You are not logged in</div>
+                <div className="btnPartHeader">
+                    <Link className="btn" to="/login">
+                        LogIn
+                    </Link>
+                    <Link className="btn" to="/signup">
+                        SignUp
+                    </Link>
+                </div>
+            </div>
+        );
+    }
 
-  renderLoggedIn() {
-    return (
-        <Nav className="ml-auto" navbar>
-          <NavItem>
-          < NavLink href='/Menu'>Menu</NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink href='/chat'>chat</NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink onClick={this.doLogout}>Logout</NavLink>
-          </NavItem>
-        </Nav>
-    );
-  }
+    render() {
+        const userId = this.props.user ? this.props.user.userId : null;
 
+        let content;
+        if (! userId) {
+            content = this.renderNotLoggedIn();
+        } else {
+            content = this.renderLoggedIn(userId);
+        }
 
-
-  renderNotLoggedIn = () => {
-    return (
-        <Nav className="ml-auto" navbar>
-          <NavItem>
-            <NavLink href='/signup'>Sign up</NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink href='/login'>Login</NavLink>
-          </NavItem>
-        </Nav>
-    );
-  }
-
-
-
-  render = () => {
-    const userId = this.props.userId;
-
-    return (
-            <Navbar
-                color="dark"
-                dark expand="md"
-                style={{marginBottom: "10px"}}>
-              <NavbarBrand href="/">LOGO/HOME</NavbarBrand>
-              <NavbarToggler onClick={this.toggle} />
-              <Collapse isOpen={this.state.isOpen} navbar>
-                {userId !== null && userId !== undefined ? (
-                        this.renderLoggedIn()
-                ):(
-                        this.renderNotLoggedIn()
-                  )}
-              </Collapse>
-            </Navbar>
-    );
-  }
+        return (
+            <div className={"headerBar"}>
+                <Link className="btn home" to={"/"}>
+                    Home
+                </Link>
+                {content}
+            </div>
+        );
+    }
 }
 
 export default withRouter(Header);

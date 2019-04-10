@@ -2,7 +2,6 @@ const express = require('express');
 const passport = require('passport');
 
 const Users = require('../db/users');
-const Tokens = require('../ws/tokens');
 
 const router = express.Router();
 
@@ -36,22 +35,6 @@ router.post('/logout', function(req, res){
 
     req.logout();
     res.status(204).send();
-});
-
-/*
-    Create a one-time random token associated with the current
-    logged in user, which is defined by the provided session cookie.
- */
-router.post('/wstoken', function (req, res) {
-
-    if(! req.user){
-        res.status(401).send();
-        return;
-    }
-
-    const token = Tokens.createToken(req.user.id);
-
-    res.status(201).json({wstoken: token});
 });
 
 /*
