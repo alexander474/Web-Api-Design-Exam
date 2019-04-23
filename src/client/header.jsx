@@ -30,12 +30,13 @@ export class Header extends React.Component {
     renderLoggedIn(userId) {
         return (
             <div className="msgDiv">
-                <h3 className="notLoggedInMsg">
-                    Welcome {userId}
-                    !!!
-                </h3>
-
-                <div className="btn btnPartHeader" onClick={this.doLogout} id="logoutBtnId">
+                <Link className="btn" to="/menu">
+                    Menu
+                </Link>
+                <Link className="btn" to="/chat">
+                    Chat
+                </Link>
+                <div className="btn btnPartHeader" onClick={()=>this.doLogout()} id="logoutBtnId">
                     Logout
                 </div>
             </div>
@@ -45,8 +46,13 @@ export class Header extends React.Component {
     renderNotLoggedIn() {
         return (
             <div className="msgDiv">
-                <div className="notLoggedInMsg">You are not logged in</div>
                 <div className="btnPartHeader">
+                    <Link className="btn" to="/menu">
+                        Menu
+                    </Link>
+                    <Link className="btn" to="/chat">
+                        Chat
+                    </Link>
                     <Link className="btn" to="/login">
                         LogIn
                     </Link>
@@ -59,10 +65,10 @@ export class Header extends React.Component {
     }
 
     render() {
-        const userId = this.props.user ? this.props.user.userId : null;
+        const userId = this.props.user!==null && this.props.user!==undefined ? this.props.user.userId : null;
 
         let content;
-        if (! userId) {
+        if (userId === null) {
             content = this.renderNotLoggedIn();
         } else {
             content = this.renderLoggedIn(userId);
@@ -70,7 +76,7 @@ export class Header extends React.Component {
 
         return (
             <div className={"headerBar"}>
-                <Link className="btn home" to={"/"}>
+                <Link className="btn btn_home" to={"/"}>
                     Home
                 </Link>
                 {content}

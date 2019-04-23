@@ -7,6 +7,7 @@ const path = require('path');
 
 const authApi = require('./routes/auth-api');
 const menuApi = require('./routes/menu-api');
+const dishApi = require('./routes/dish-api');
 const Users = require('./db/users');
 
 const WsHandler = require('./ws/ws-handler');
@@ -16,10 +17,6 @@ const app = express();
 
 //to handle JSON payloads
 app.use(bodyParser.json());
-
-WsHandler.init(app);
-
-
 
 app.use(session({
     secret: 'a secret used to encrypt the session cookies',
@@ -70,8 +67,10 @@ passport.deserializeUser(function (id, done) {
 
 
 //--- Routes -----------
+WsHandler.init(app);
 app.use('/api', authApi);
 app.use('/api', menuApi);
+app.use('/api', dishApi);
 
 //handling 404 for /api calls
 app.all('/api*', (req,res) => {

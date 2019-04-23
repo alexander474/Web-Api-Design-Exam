@@ -4,9 +4,14 @@ import {BrowserRouter, Switch, Route} from 'react-router-dom';
 
 
 import {Home} from "./home";
-import Login from "./login";
-import SignUp from "./signup";
+import Login from "./authentication/login";
+import SignUp from "./authentication/signup";
 import Header from "./header";
+import Menus from "./menu/menus";
+import Chat from "./chat/chat";
+import AddDish from './dish/addDish'
+import EditDish from './dish/editDish'
+import EditMenu from './menu/editMenu'
 
 class App extends React.Component {
 
@@ -14,6 +19,7 @@ class App extends React.Component {
         super(props);
         this.state = {
             user: null,
+            errorMsg: null
         };
     }
 
@@ -23,14 +29,13 @@ class App extends React.Component {
 
 
     fetchAndUpdateUserInfo = async () => {
-
         const url = "/api/user";
-
         let response;
 
         try {
             response = await fetch(url, {
-                method: "get"
+                method: "get",
+                credentials: 'include',
             });
         } catch (err) {
             this.setState({errorMsg: "Failed to connect to server: " + err});
@@ -38,18 +43,17 @@ class App extends React.Component {
         }
 
         if (response.status === 401) {
-            //that is ok
             this.updateLoggedInUser(null);
             return;
         }
 
         if (response.status !== 200) {
-            //TODO here could have some warning message in the page.
         } else {
             const payload = await response.json();
             this.updateLoggedInUser(payload);
         }
     };
+
 
     updateLoggedInUser = (user) => {
         this.setState({user: user});
@@ -82,6 +86,26 @@ class App extends React.Component {
                         <Route exact path="/signup"
                                render={props => <SignUp {...props}
                                                         fetchAndUpdateUserInfo={this.fetchAndUpdateUserInfo}/>}/>
+                        <Route exact path="/menu"
+                               render={props => <Menus {...props}
+                                                        user={this.state.user}
+                                                        fetchAndUpdateUserInfo={this.fetchAndUpdateUserInfo}/>}/>
+                        <Route exact path="/editMenu/:id"
+                               render={props => <EditMenu {...props}
+                                                       user={this.state.user}
+                                                       fetchAndUpdateUserInfo={this.fetchAndUpdateUserInfo}/>}/>
+                        <Route exact path="/editDish/:id"
+                               render={props => <EditDish {...props}
+                                                       user={this.state.user}
+                                                       fetchAndUpdateUserInfo={this.fetchAndUpdateUserInfo}/>}/>
+                        <Route exact path="/addDish"
+                               render={props => <AddDish {...props}
+                                                       user={this.state.user}
+                                                       fetchAndUpdateUserInfo={this.fetchAndUpdateUserInfo}/>}/>
+                        <Route exact path="/chat"
+                               render={props => <Chat {...props}
+                                                       user={this.state.user}
+                                                       fetchAndUpdateUserInfo={this.fetchAndUpdateUserInfo}/>}/>
                         <Route exact path="/"
                                render={props => <Home {...props}
                                                       user={this.state.user}

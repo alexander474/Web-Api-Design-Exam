@@ -1,5 +1,5 @@
 import React from "react";
-import {Link} from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 
 
 export class Home extends React.Component {
@@ -20,17 +20,10 @@ export class Home extends React.Component {
 
         return (
             <div>
-                {loggedIn ? (
-                    <div>
-                        <p>Homepage & you are logged in</p>
-                    </div>
-                ) : (
-                    <p>
-                        You need to log-in to start playing!
-                    </p>
-                )}
-
+                <p>Welcome to my page {loggedIn?(user.userId):("")}</p>
             </div>
         );
     }
 }
+
+export default withRouter(Home);

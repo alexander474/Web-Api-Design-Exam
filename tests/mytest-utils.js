@@ -194,8 +194,44 @@ class WsStub extends WS{
     }
 }
 
+/**
+ * https://kristiania.instructure.com/courses/1849/discussion_topics/9168 (23.04.2019)
+ * @param port
+ */
+function overrideWebSocket(port){
+    class WsStub extends WS {
 
-function overrideWebSocket(){
+        constructor(url) {
+
+            const replaced = url.replace(/((?<!\/)\/(?!\/))/, ":" + port + "/");
+            super(replaced);
+
+            this.on("message", data => {
+                this.onmessage({
+                    data
+                });
+            });
+
+
+            this.close = () => this.terminate();
+        }
+
+        onerror(error) {
+
+        }
+        send(data, options, cb) {
+
+            if (this.readyState !== WS.OPEN) {
+                setTimeout(() => {
+                    // NOTE: could potentially
+                    // cause infinite loop, but Jest would stop first. Also it is unlikely.
+                    this.send(data, options, cb);
+                }, 20);
+            } else {
+                super.send(data, options, cb);
+            }
+        }
+    }
     global.WebSocket = WsStub;
 }
 

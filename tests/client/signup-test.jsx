@@ -6,7 +6,7 @@ const {overrideFetch, asyncCheckCondition} = require('../mytest-utils');
 const {app} = require('../../src/server/app');
 
 
-const {SignUp} = require('../../src/client/signup');
+const {SignUp} = require('../../src/client/authentication/signup');
 const {resetAllUsers, getUser, createUser} = require('../../src/server/db/users');
 
 

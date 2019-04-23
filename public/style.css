@@ -1,33 +1,11 @@
 body {
-  background-color: green;
+  background-color: lightslategrey;
 }
 
 #root {
   margin: 30px;
 }
 
-
-.quizBtn {
-  height: 50px;
-  background-color: rgb(207, 205, 200);
-  font-size: 1em;
-  border: 2px solid black;
-  border-radius: 5px;
-  margin: 5px;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-left: 5%;
-  margin-right: 5%;
-}
-
-
-.quizQuestion {
-  display: inline-block;
-  font-size: 1em;
-  font-weight: bold;
-}
 
 .headerBar {
   margin-top: 30px;
@@ -45,12 +23,7 @@ body {
   justify-content: space-between;
   width: 40%;
 }
-.notLoggedInMsg {
-  justify-self: flex-start;
-}
-.home {
-  float: left;
-}
+
 .btnPartHeader {
   float: right;
   margin: 30px;
@@ -66,48 +39,6 @@ body {
   margin-top: -1px;
 }
 
-.cell-row:after {
-  clear: both;
-  content: "";
-  display: table;
-}
-
-.cell {
-  float: left;
-  background: white;
-  border: 1px solid gray;
-  font-size: 24px;
-  font-weight: bold;
-  text-align: center;
-  line-height: 30px;
-  height: 30px;
-  width: 30px;
-  margin-right: -1px;
-  margin-top: -1px;
-}
-
-.cell-victory {
-  background: lightskyblue;
-}
-
-.cell-defeat {
-  background: red;
-}
-
-.cell-to-insert {
-  background: yellow;
-}
-
-.game {
-  display: flex;
-  flex-direction: row;
-}
-
-.game-info {
-  margin-top: 30px;
-  margin-left: 20px;
-  font-weight: bold;
-}
 .btnPart {
   display: inline-flex;
 }
@@ -126,15 +57,23 @@ body {
   text-decoration: none;
 }
 
-.btnDeActive {
-  width: 90px;
-  background-color: rgb(207, 205, 200);
-  color: rgb(153, 153, 153);
-  font-size: 1em;
+.btn_home {
+  float: left;
+}
+
+.menuListRow{
+  margin: 20px;
+}
+
+.dishesTable{
+  width: 100%;
   text-align: center;
-  padding: 5px;
-  border: 2px solid rgb(153, 153, 153);
-  border-radius: 5px;
-  margin: 5px;
-  cursor: pointer;
+}
+
+.dishesTable tr:hover {
+  background-color: slategray;
+}
+
+ul {
+  list-style-type: none;
 }
