@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
+import PostsList from "./post/postsList";
 
 
 export class Home extends React.Component {
@@ -21,6 +22,7 @@ export class Home extends React.Component {
         return (
             <div>
                 <p>Welcome to my page {loggedIn?(user.email):("")}</p>
+                {loggedin? <PostsList user={user}/> : null}
             </div>
         );
     }
