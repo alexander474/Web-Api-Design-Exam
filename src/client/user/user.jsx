@@ -9,9 +9,9 @@ export const User = (props) => {
         return (
             <div>
                 <h1>{firstName+" "+surName}</h1>
-                <p>Email: {email}</p>
-                <p>Birth: {birthDate}</p>
-                <p>Country: {country}</p>
+                {email !== null ?<p>Email: {email}</p>:null}
+                {birthDate !== null ?<p>Birth: {birthDate}</p>:null}
+                {country !== null ?<p>Country: {country}</p>:null}
                 <br/>
                 <PostsList user={props.user} endPoint={"/post/"+email}/>
             </div>

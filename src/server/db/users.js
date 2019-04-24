@@ -63,6 +63,17 @@ function verifyFriend(emailOne, emailTwo){
     return userOne.friends.contains(userTwo.email) && userTwo.friends.contains(userOne.email);
 }
 
+function removeFriend(emailOne, emailTwo){
+    if(verifyFriend(emailOne, emailTwo)){
+        const userOne = getUser(emailOne);
+        const userTwo = getUser(emailTwo);
+        userOne.friends.splice(userOne.friends.indexOf(emailTwo), 1);
+        userTwo.friends.splice(userTwo.friends.indexOf(emailOne), 1);
+        return true;
+    }
+    return false;
+}
+
 function resetAllUsers(){
     users.clear();
 }
@@ -73,8 +84,7 @@ function initWithDefaultData(){
     createUser("foo@bar.no", "a", "Foo", "Bar", "090998", "Norway", []);
     createUser("b@b.no", "a", "b", "b", "090998", "Norway", []);
     addFriend("a@a.no", "foo@bar.no");
-    addFriend("a@a.no", "b@b.no");
 }
 
 
-module.exports = {getUser, getUsers, verifyUser, createUser, addFriend, verifyFriend, resetAllUsers, initWithDefaultData};
+module.exports = {getUser, getUsers, verifyUser, removeFriend, createUser, addFriend, verifyFriend, resetAllUsers, initWithDefaultData};

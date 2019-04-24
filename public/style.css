@@ -61,19 +61,31 @@ body {
   float: left;
 }
 
-.menuListRow{
-  margin: 20px;
+ul {
+  list-style-type: none;
 }
 
-.dishesTable{
-  width: 100%;
-  text-align: center;
-}
+.post_input{}
 
-.dishesTable tr:hover {
+.post_element{
   background-color: slategray;
 }
 
-ul {
-  list-style-type: none;
+.post_title{
+  margin: 10px 5px;
+  font-size: 20px;
+  font-weight: 600;
+  display: inline;
+  padding: 5px;
+}
+
+.post_email{
+  margin: 10px 5px;
+  font-size: 14px;
+  float: right;
+}
+
+.post_text{
+  margin: 10px 5px;
+  font-size: 16px;
 }

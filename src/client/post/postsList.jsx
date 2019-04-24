@@ -97,8 +97,14 @@ export class PostsList extends React.Component {
         let posts = <div><p>No posts to display</p></div>;
         if (this.state.posts !== null) {
             posts = <div>
-                {this.state.posts.map(m =>
-                    <p key={"msg_key" + m.id}> {m.email +": ["+m.title+"] "+ m.text}</p>
+                {this.state.posts.map(m => {
+                    return (
+                        <div className={"post_element"} key={"msg_key_ls" + m.id}>
+                            <p className={"post_title"}>{m.title}</p>
+                            <p className={"post_email"}>{m.email}</p>
+                            <p className={"post_text"}>{m.text}</p>
+                        </div>
+                        )}
                 )}
             </div>;
         }

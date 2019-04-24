@@ -87,6 +87,10 @@ class App extends React.Component {
                                render={props => <UserPage {...props}
                                                       user={this.state.user}
                                                       fetchAndUpdateUserInfo={this.fetchAndUpdateUserInfo}/>}/>
+                        <Route exact path="/user/:email"
+                               render={props => <UserPage {...props}
+                                                          user={this.state.user}
+                                                          fetchAndUpdateUserInfo={this.fetchAndUpdateUserInfo}/>}/>
                         <Route exact path="/chat"
                                render={props => <Chat {...props}
                                                        user={this.state.user}

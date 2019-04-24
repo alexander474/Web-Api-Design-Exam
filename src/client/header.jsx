@@ -4,6 +4,10 @@ import { Link, withRouter } from "react-router-dom";
 export class Header extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            search: "",
+            searchResult: []
+        }
     }
 
     doLogout = async () => {
@@ -27,9 +31,43 @@ export class Header extends React.Component {
         this.props.history.push("/");
     };
 
+    fetchSearch = async () => {
+      const response = await fetch("api/search/"+this.state.search);
+      const body = await response.json();
+      this.setSearchResult(body);
+    };
+
+    setSearchResult = (searchResult) => {
+        this.setState({searchResult})
+    };
+
+    onSearchChange = (e) => {
+        this.setState({search: e.target.value});
+        this.fetchSearch();
+        console.log(this.state.searchResult);
+    };
+
+
+
     renderLoggedIn(user) {
         return (
             <div className="msgDiv">
+                <div>
+                    <input type="text"
+                           id="searchInputId"
+                           className="inputName"
+                           value={this.state.search}
+                           onChange={this.onSearchChange}/>
+                           <div>
+                            {this.state.searchResult.length>0?(
+                                <ul>
+                                    {this.state.searchResult.map((u,i) => {
+                                        return <li  key={"key_kk"+i%2}><Link to={"/user/"+u.email}>{u.firstName}</Link></li>
+                                    })}
+                                </ul>
+                            ):null}
+                           </div>
+                </div>
                 <Link className="btn" to="/chat">
                     Chat
                 </Link>

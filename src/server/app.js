@@ -6,6 +6,8 @@ const LocalStrategy = require('passport-local').Strategy;
 const path = require('path');
 
 const authApi = require('./routes/auth-api');
+const friendApi = require('./routes/friend-api');
+const searchApi = require('./routes/search-api');
 const Users = require('./db/users');
 
 const WsHandler = require('./ws/ws-handler');
@@ -67,6 +69,8 @@ passport.deserializeUser(function (email, done) {
 //--- Routes -----------
 WsHandler.init(app);
 app.use('/api', authApi);
+app.use('/api', friendApi);
+app.use('/api', searchApi);
 
 //handling 404 for /api calls
 app.all('/api*', (req,res) => {
