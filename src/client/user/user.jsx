@@ -32,6 +32,7 @@ export class User extends React.Component {
         const email = this.props.user.email;
         return(
             <div>
+                <p>You are not friend with this person and cannot se profile details</p>
                 <div className={"btn"} onClick={()=>this.addFriend(email)}>Add friend</div>
             </div>
         );
@@ -50,7 +51,15 @@ export class User extends React.Component {
                     <div>
                         <p>Friends: </p>
                         {friends.map(f => {
-                        return <p key={"key_la"+f}>{f}</p>
+                        return (
+                            <div key={"key_la"+f}
+                                className={"friends_div"}>
+                                <p className={"friends_div_email"}>{f}</p>
+                                <div
+                                    className={"btn friends_div_btn"}
+                                    onClick={()=>this.removeFriend(f)}>Remove</div>
+                            </div>
+                        );
                         })}
                     </div>
                     ) : null}

@@ -14,20 +14,23 @@ function init(app) {
     ews = express_ws(app);
 
     app.ws('/message', function (socket, req) {
-        if(! req.user){
+        if (!req.user) {
             socket.status(401).send();
             return;
         }
+        connections.set(req.user.email, socket);
         console.log('Established a new WS message connection');
         socket.send(JSON.stringify(messages));
         socket.on('message', fromClient => {
-           const dto = JSON.parse(fromClient);
-           const id = messageCount++;
-           const msg = {id: id, author: dto.author, text: dto.text};
-           messages.push(msg);
-           ews.getWss().clients.forEach((client) => {
-                   client.send(JSON.stringify([msg]))
-           })
+            const dto = JSON.parse(fromClient);
+            const id = messageCount++;
+            const msg = {id: id, emailFrom: dto.emailFrom, emailTo: dto.emailTo, text: dto.text};
+            messages.push(msg);
+            const reciever = connections.get(dto.emailTo);
+            if(reciever) {
+                reciever.send(JSON.stringify([dto]));
+                socket.send(JSON.stringify([dto]));
+            }
         });
     });
 

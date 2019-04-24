@@ -2,6 +2,15 @@ const express = require('express');
 const router = express.Router();
 const User = require("../db/users");
 
+
+router.get("/friend/request", (req, res) => {
+    if(! req.user){
+        res.status(401).send();
+        return;
+    }
+    res.json(User.getFriendRequests(req.user.email))
+});
+
 router.get("/friend/:id", (req, res) => {
     if(! req.user){
         res.status(401).send();
@@ -44,15 +53,6 @@ router.post("/friend/add", (req, res) => {
     }
     User.removeFriendRequest(req.user.email, req.body.email);
     res.json(User.addFriend(req.body.email, req.user.email))
-});
-
-router.get("/friend/request", (req, res) => {
-    if(! req.user){
-        res.status(401).send();
-        return;
-    }
-    console.log(User.getFriendRequests(req.user.email));
-    res.json(User.getFriendRequests(req.user.email))
 });
 
 router.delete("/friend/:email", (req, res) => {

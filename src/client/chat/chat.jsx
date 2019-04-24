@@ -5,84 +5,69 @@ export class Chat extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: "Unknown",
             text: "",
             messages: null,
+            currentReciever: null,
         }
     }
 
     componentDidMount() {
-        this.fetchChat();
+        if(this.state.currentReciever !== null) {
+            this.fetchChat();
+        }
     }
 
     componentWillUnmount() {
-        this.socket.close();
+        if(this.state.currentReciever !== null) {
+            this.socket.close();
+        }
     }
 
     fetchChat = () => {
-        this.socket = new WebSocket("ws://"+window.location.host+"/message");
-        this.socket.onmessage = ( e => {
-           const messages = JSON.parse(e.data);
-           this.setState( prev => {
-               if(prev.messages === null){
-                   return {messages: messages}
-               } else{
-                   return {messages: [...prev.messages, ...messages]}
-               }
-           })
-        });
+        let open = false;
+        if(!open) {
+            open = true;
+            this.socket = new WebSocket("ws://" + window.location.host + "/message/" + this.state.currentReciever);
+            this.socket.onmessage = (e => {
+                const messages = JSON.parse(e.data);
+                this.setState(prev => {
+                    if (prev.messages === null) {
+                        return {messages: messages}
+                    } else {
+                        return {messages: [...prev.messages, ...messages]}
+                    }
+                })
+            });
+        }else{
+            this.socket.close();
+            open = false;
+        }
     };
 
-    sendMessage = (name) => {
-        const payload = JSON.stringify({author: name, text: this.state.text});
+    sendMessage = (emailFrom, emailTo) => {
+        const payload = JSON.stringify({
+            emailFrom: emailFrom,
+            emailTo: emailTo,
+            text: this.state.text});
         this.socket.send(payload);
         this.setState({text: ""});
     };
 
-    onNameChange = (e) => {
-        this.setState({name: e.target.value});
+    onCurrentRecieverChange = (currentReciever) => {
+        this.setState({currentReciever});
+        this.fetchChat();
     };
 
     onTextChange = (e) => {
         this.setState({text: e.target.value});
     };
 
-    notLoggedInFields() {
-        return (
-            <div>
-                <div>
-                    <p className="inputName">Name:</p>
-                    <input type="text"
-                           id="nameInputId"
-                           className="inputName"
-                           value={this.state.name}
-                           onChange={this.onNameChange}/>
-                </div>
-                <br/>
-                <div>
-                    <p>Message:</p>
-                    <textarea  cols="50"
-                               rows="4"
-                               id="msgInputId"
-                               value={this.state.text}
-                               onChange={this.onTextChange} />
-                </div>
-                <br/>
 
-                <div id="sendBtnId" className="btn" onClick={() => this.sendMessage(this.state.name)}>Send</div>
-            </div>
-        );
-    };
-
-    loggedInFields(userId) {
+    loggedInFields() {
         return(
             <div>
                 <div>
-                    <p className="inputName">Name:</p>
-                    <p>{userId}</p>
-                </div>
-                <br/>
-                <div>
+                    <p>TO: {this.state.currentReciever!==null?this.state.currentReciever:"SELECT RECIEVER"}</p>
                     <p>Message:</p>
                     <textarea  cols="50"
                                rows="4"
@@ -90,11 +75,35 @@ export class Chat extends React.Component {
                                onChange={this.onTextChange} />
                 </div>
                 <br/>
-
-                <div id="sendId" className="btn" onClick={() => this.sendMessage(userId)}>Send</div>
+                <div
+                    id="sendId"
+                    className="btn"
+                    onClick={() => this.sendMessage(this.props.user.email, this.state.email)}>
+                    Send
+                </div>
             </div>
         );
     };
+
+    friendsDisplay(){
+        return (
+            <div>
+                <h2>Friends: </h2>
+                <ul>
+                    {this.props.user.friends.map(f => {
+                        return (
+                            <li
+                            className={"chat_friends_email"}
+                            key={"ii_key_"+f}
+                            onClick={()=>this.onCurrentRecieverChange(f)}>
+                            {f}
+                            </li>
+                        )
+                    })}
+                </ul>
+            </div>
+        );
+    }
 
     messageDisplay() {
         let messages = <div/>;
@@ -112,12 +121,21 @@ export class Chat extends React.Component {
         const user = this.props.user;
         const loggedIn = user !== null && user !== undefined;
 
-        return (
-            <div>
-                {loggedIn ? this.loggedInFields(user.userId) : this.notLoggedInFields()}
-                {this.messageDisplay()}
-            </div>
-        );
+        if(loggedIn) {
+            return (
+                <div>
+                    <div className={"chat_main"}>
+                        {this.loggedInFields()}
+                        {this.messageDisplay()}
+                    </div>
+                    <div className={"chat_friend_display"}>
+                        {this.friendsDisplay()}
+                    </div>
+                </div>
+            );
+        }else{
+            return <div>Needs to login</div>
+        }
     }
 }
 

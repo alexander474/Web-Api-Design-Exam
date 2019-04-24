@@ -89,9 +89,6 @@ export class Header extends React.Component {
         return (
             <div className="msgDiv">
                 <div className="btnPartHeader">
-                    <Link className="btn" to="/chat">
-                        Chat
-                    </Link>
                     <Link className="btn" to="/login">
                         LogIn
                     </Link>

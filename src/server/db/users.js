@@ -83,6 +83,7 @@ function removeFriendRequest(email, emailFrom){
     }
     const requests = getFriendRequests(email);
     requests.splice(requests.indexOf(emailFrom), 1);
+    friendRequestByEmail.set(email, requests);
     return true;
 }
 
@@ -143,7 +144,8 @@ function initWithDefaultData(){
     createUser("ba@b.no", "a", "ba", "b", "090998", "Norway", []);
     createUser("bc@b.no", "a", "bc", "b", "090998", "Norway", []);
     addFriend("a@a.no", "foo@bar.no");
-    sendFriendRequest("ba@b.no", "a@a.no")
+    sendFriendRequest("ba@b.no", "a@a.no");
+    sendFriendRequest("bc@b.no", "a@a.no");
 }
 
 

@@ -14,9 +14,22 @@ export class Request extends React.Component {
     }
 
     fetchRequests = async () => {
-        const response = await fetch("/friend/request");
+        const response = await fetch("api/friend/request");
         const body = await response.json();
         this.setState({requests: body});
+    };
+
+    addFriend = async (email) => {
+        const payload = {email: email};
+        await fetch("/api/friend/add", {
+            method: "post",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+        await this.fetchRequests();
+        await this.props.fetchAndUpdateUserInfo();
     };
 
 
@@ -29,7 +42,7 @@ export class Request extends React.Component {
                 <div>
                     <ul>
                         {this.state.requests.map(r => {
-                           return <li>{r}</li>
+                           return <li>{r} <div className={"btn friends_div_btn"} onClick={()=>this.addFriend(r)}>Add</div></li>
                         })}
                     </ul>
                 </div>

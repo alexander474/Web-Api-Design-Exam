@@ -90,3 +90,27 @@ ul {
   margin: 10px 5px;
   font-size: 16px;
 }
+
+.friends_div_email{
+  display: inline-block;
+}
+
+.friends_div_btn{
+  display: inline-block;
+}
+
+.chat_friend_display{
+  float: right;
+}
+
+.chat_main{
+  float: left;
+}
+
+.chat_friends_email{
+  background-color: slategrey;
+  cursor: pointer;
+  border: 1px solid black;
+  border-radius: 5%;
+  padding: 15px;
+}
