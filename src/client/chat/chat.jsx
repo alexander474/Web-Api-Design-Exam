@@ -20,7 +20,7 @@ export class Chat extends React.Component {
     }
 
     fetchChat = () => {
-        this.socket = new WebSocket("ws://"+window.location.host);
+        this.socket = new WebSocket("ws://"+window.location.host+"/message");
         this.socket.onmessage = ( e => {
            const messages = JSON.parse(e.data);
            this.setState( prev => {

@@ -58,7 +58,8 @@ router.get('/user', function (req, res) {
         firstName: req.user.firstName,
         surName: req.user.surName,
         birthDate: req.user.birthDate,
-        country: req.user.country
+        country: req.user.country,
+        friends: req.user.friends
     });
 });
 

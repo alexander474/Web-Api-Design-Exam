@@ -5,10 +5,16 @@ export class PostsList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            mail: null,
+            email: null,
             title: "",
             text: "",
             posts: null,
+        }
+    }
+
+    componentWillMount() {
+        if(this.props.user !== null){
+            this.updateEmail(this.props.user.email)
         }
     }
 
@@ -21,7 +27,7 @@ export class PostsList extends React.Component {
     }
 
     fetchPosts = () => {
-        this.socket = new WebSocket("ws://"+window.location.host+"/post");
+        this.socket = new WebSocket("ws://"+window.location.host+this.props.endPoint);
         this.socket.onmessage = ( e => {
             const posts = JSON.parse(e.data);
             this.setState( prev => {
@@ -34,8 +40,8 @@ export class PostsList extends React.Component {
         });
     };
 
-    sendMessage = (mail) => {
-        const payload = JSON.stringify({mail: mail, title: this.state.title,text: this.state.text});
+    sendMessage = (email) => {
+        const payload = JSON.stringify({email: email, title: this.state.title,text: this.state.text});
         this.socket.send(payload);
         this.setState({
             title: "",
@@ -44,7 +50,7 @@ export class PostsList extends React.Component {
     };
 
     updateEmail = (email) => {
-        this.setState(email);
+        this.setState({email});
     };
 
     onTitleChange = (e) => {
@@ -58,7 +64,7 @@ export class PostsList extends React.Component {
     renderLoggedIn() {
         return (
             <div>
-                <div>
+                <div className={"post_input post_title_div"}>
                     <p className="inputName">Title:</p>
                     <input type="text"
                            id="titleInputId"
@@ -66,8 +72,7 @@ export class PostsList extends React.Component {
                            value={this.state.title}
                            onChange={this.onTitleChange}/>
                 </div>
-                <br/>
-                <div>
+                <div className={"post_input post_text_div"}>
                     <p>Text:</p>
                     <textarea  cols="50"
                                rows="4"
@@ -75,8 +80,6 @@ export class PostsList extends React.Component {
                                value={this.state.text}
                                onChange={this.onTextChange} />
                 </div>
-                <br/>
-
                 <div id="sendBtnId" className="btn" onClick={() => this.sendMessage(this.state.email)}>Send</div>
             </div>
         );
@@ -92,10 +95,10 @@ export class PostsList extends React.Component {
 
     postsDisplay() {
         let posts = <div><p>No posts to display</p></div>;
-        if (this.state.messages !== null) {
+        if (this.state.posts !== null) {
             posts = <div>
-                {this.state.messages.map(m =>
-                    <p key={"msg_key" + m.id}> {m.mail +": ["+m.title+"] "+ m.text}</p>
+                {this.state.posts.map(m =>
+                    <p key={"msg_key" + m.id}> {m.email +": ["+m.title+"] "+ m.text}</p>
                 )}
             </div>;
         }
@@ -105,12 +108,11 @@ export class PostsList extends React.Component {
     render() {
         const user = this.props.user;
         const loggedIn = user !== null && user !== undefined;
-        if(loggedIn) this.updateEmail(user.email);
 
         return (
             <div>
                 {loggedIn ? this.renderLoggedIn() : this.renderNotLoggedIn()}
-                {this.postsDisplay()}
+                {loggedIn ? this.postsDisplay() : null}
             </div>
         );
     }

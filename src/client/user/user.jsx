@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, withRouter } from "react-router-dom";
+import PostsList from "../post/postsList";
 
 export const User = (props) => {
     if(props.user !== null && props.user !== undefined) {
@@ -11,6 +12,8 @@ export const User = (props) => {
                 <p>Email: {email}</p>
                 <p>Birth: {birthDate}</p>
                 <p>Country: {country}</p>
+                <br/>
+                <PostsList user={props.user} endPoint={"/post/"+email}/>
             </div>
         );
     }else{

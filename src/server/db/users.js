@@ -23,7 +23,7 @@ function verifyUser(email, password){
     return user.password === password;
 }
 
-function createUser(email, password, firstName, surName, birthDate, country){
+function createUser(email, password, firstName, surName, birthDate, country, friends){
     if(getUser(email) !== undefined ){
         return false;
     }
@@ -35,7 +35,7 @@ function createUser(email, password, firstName, surName, birthDate, country){
         surName: surName,
         birthDate: birthDate,
         country: country,
-        friends: []
+        friends: friends
     };
 
     users.set(email, user);
@@ -69,8 +69,11 @@ function resetAllUsers(){
 
 function initWithDefaultData(){
     resetAllUsers();
-    createUser("a@a.no", "a", "Alexander", "Bredesen", "090998", "Norway", ["foo@bar.no"]);
-    createUser("foo@bar.no", "a", "Foo", "Bar", "090998", "Norway", ["a@a.no"]);
+    createUser("a@a.no", "a", "Alexander", "Bredesen", "090998", "Norway", []);
+    createUser("foo@bar.no", "a", "Foo", "Bar", "090998", "Norway", []);
+    createUser("b@b.no", "a", "b", "b", "090998", "Norway", []);
+    addFriend("a@a.no", "foo@bar.no");
+    addFriend("a@a.no", "b@b.no");
 }
 
 
