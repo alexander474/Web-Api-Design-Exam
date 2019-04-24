@@ -128,7 +128,7 @@ function flushPromises() {
 
 
 /*
-    A WebSocket connection can take some time to open (e.g., handshake messages).
+    A WebSocket connection can take some time to open (e.g., handshake chat).
     So, here we return a Promise which resolves to a boolean, specifying whether
     the WS was opened within a certain amount of timeoutMs milliseconds
  */

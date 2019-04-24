@@ -43,7 +43,7 @@ router.post("/friend", (req, res) => {
         res.status(401).send();
         return;
     }
-    res.json(User.sendFriendRequest(req.body.email, req.user.email))
+    res.json(User.sendFriendRequest(req.user.email, req.body.email))
 });
 
 router.post("/friend/add", (req, res) => {

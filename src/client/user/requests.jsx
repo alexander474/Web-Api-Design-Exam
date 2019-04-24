@@ -41,8 +41,8 @@ export class Request extends React.Component {
             return (
                 <div>
                     <ul>
-                        {this.state.requests.map(r => {
-                           return <li>{r} <div className={"btn friends_div_btn"} onClick={()=>this.addFriend(r)}>Add</div></li>
+                        {this.state.requests.map((r,i) => {
+                           return <li key={"key_"+r+(i%2)}>{r} <div className={"btn friends_div_btn"} onClick={()=>this.addFriend(r)}>Add</div></li>
                         })}
                     </ul>
                 </div>

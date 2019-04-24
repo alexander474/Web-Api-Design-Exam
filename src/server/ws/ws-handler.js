@@ -1,5 +1,6 @@
 const express_ws = require('express-ws');
 const Posts = require('../db/posts');
+const Messages = require('../db/messages');
 
 
 let ews;
@@ -20,17 +21,15 @@ function init(app) {
         }
         connections.set(req.user.email, socket);
         console.log('Established a new WS message connection');
-        socket.send(JSON.stringify(messages));
+        socket.send(JSON.stringify(Messages.getUserChats(req.user.email)));
         socket.on('message', fromClient => {
             const dto = JSON.parse(fromClient);
-            const id = messageCount++;
-            const msg = {id: id, emailFrom: dto.emailFrom, emailTo: dto.emailTo, text: dto.text};
-            messages.push(msg);
-            const reciever = connections.get(dto.emailTo);
-            if(reciever) {
-                reciever.send(JSON.stringify([dto]));
-                socket.send(JSON.stringify([dto]));
+            Messages.createMessage(dto.emailFrom, dto.emailTo, dto.text);
+            const receiver = connections.get(dto.emailTo);
+            if(receiver) {
+                receiver.send(JSON.stringify(Messages.getChat(dto.emailFrom, dto.emailTo)));
             }
+                socket.send(JSON.stringify(Messages.getChat(dto.emailFrom, dto.emailTo)));
         });
     });
 

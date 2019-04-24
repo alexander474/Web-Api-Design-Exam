@@ -6,56 +6,64 @@ export class Chat extends React.Component {
         super(props);
         this.state = {
             text: "",
+            chat: null,
+            currentReceiver: null,
             messages: null,
-            currentReciever: null,
         }
     }
 
     componentDidMount() {
-        if(this.state.currentReciever !== null) {
-            this.fetchChat();
-        }
+        this.fetchChat();
     }
 
     componentWillUnmount() {
-        if(this.state.currentReciever !== null) {
-            this.socket.close();
-        }
+        this.socket.close();
     }
 
     fetchChat = () => {
-        let open = false;
-        if(!open) {
-            open = true;
-            this.socket = new WebSocket("ws://" + window.location.host + "/message/" + this.state.currentReciever);
-            this.socket.onmessage = (e => {
-                const messages = JSON.parse(e.data);
-                this.setState(prev => {
-                    if (prev.messages === null) {
-                        return {messages: messages}
-                    } else {
-                        return {messages: [...prev.messages, ...messages]}
-                    }
-                })
+        if(this.socket) this.socket.close();
+        this.socket = new WebSocket("ws://" + window.location.host + "/message");
+        this.socket.onmessage = (e => {
+            const chats = JSON.parse(e.data).filter( c => c.emailTo===this.state.currentReceiver);
+            if(chats.length>0)this.onMessagesChange(chats);
+        });
+    };
+
+
+
+    sendMessage = (emailFrom, emailTo) => {
+        if(this.state.text.length>0&&emailFrom!==null&&emailTo!==null) {
+            const payload = JSON.stringify({
+                emailFrom: emailFrom,
+                emailTo: emailTo,
+                text: this.state.text
             });
-        }else{
-            this.socket.close();
-            open = false;
+            this.socket.send(payload);
+            this.setState({text: ""});
         }
     };
 
-    sendMessage = (emailFrom, emailTo) => {
-        const payload = JSON.stringify({
-            emailFrom: emailFrom,
-            emailTo: emailTo,
-            text: this.state.text});
-        this.socket.send(payload);
-        this.setState({text: ""});
+    onCurrentReceiverChange = (currentReceiver) => {
+        this.setState({currentReceiver});
     };
 
-    onCurrentRecieverChange = (currentReciever) => {
-        this.setState({currentReciever});
-        this.fetchChat();
+    onMessagesChange = (chats) => {
+        console.log(chats);
+        chats.chat.map(c =>{
+                if(this.state.currentReceiver===c.emailOne||this.state.currentReceiver===c.emailTwo){
+                    this.setState(prev => {
+                        if (prev.messages === null) {
+                            return {messages: c.chat}
+                        } else {
+                            return {messages: [...prev.messages, ...c.chat]}
+                        }
+                    });
+                }
+            }
+        );
+        console.log(this.state.chat);
+        console.log(this.state.messages);
+
     };
 
     onTextChange = (e) => {
@@ -67,7 +75,7 @@ export class Chat extends React.Component {
         return(
             <div>
                 <div>
-                    <p>TO: {this.state.currentReciever!==null?this.state.currentReciever:"SELECT RECIEVER"}</p>
+                    <p>TO: {this.state.currentReceiver!==null?this.state.currentReceiver:"SELECT RECIEVER"}</p>
                     <p>Message:</p>
                     <textarea  cols="50"
                                rows="4"
@@ -78,7 +86,7 @@ export class Chat extends React.Component {
                 <div
                     id="sendId"
                     className="btn"
-                    onClick={() => this.sendMessage(this.props.user.email, this.state.email)}>
+                    onClick={() => this.sendMessage(this.props.user.email, this.state.currentReceiver)}>
                     Send
                 </div>
             </div>
@@ -95,7 +103,7 @@ export class Chat extends React.Component {
                             <li
                             className={"chat_friends_email"}
                             key={"ii_key_"+f}
-                            onClick={()=>this.onCurrentRecieverChange(f)}>
+                            onClick={()=>this.onCurrentReceiverChange(f)}>
                             {f}
                             </li>
                         )
@@ -106,33 +114,49 @@ export class Chat extends React.Component {
     }
 
     messageDisplay() {
+        const currentReceiver = this.state.currentReceiver;
         let messages = <div/>;
-        if (this.state.messages !== null) {
+        if (this.state.chat !== null) {
             messages = <div>
-                {this.state.messages.map(m =>
-                    <p key={"msg_key" + m.id}> {m.author + ": " + m.text}</p>
+                {this.state.chat.map(c =>{
+                    if(currentReceiver===c.emailOne||currentReceiver===c.emailTwo){
+                        this.onMessagesChange(c.chat);
+                        return this.state.messages.map(m => {
+                            this.onMessagesChange(m);
+                            let name = m.emailFrom;
+                            if(m.emailFrom===this.props.user.email){
+                                name = this.props.user.email
+                            }
+                            return <p key={"msg_key" + m.id+m.text}> {name + ": " + m.text}</p>
+                        })
+                    }
+                }
                 )}
                 </div>;
         }
         return messages
     };
 
+
     render() {
         const user = this.props.user;
         const loggedIn = user !== null && user !== undefined;
+        const friendsExists = user!==null&&user.friends !== null&&user.friends!==undefined&&user.friends.length>0;
 
-        if(loggedIn) {
+        if(loggedIn&&friendsExists) {
             return (
                 <div>
                     <div className={"chat_main"}>
                         {this.loggedInFields()}
-                        {this.messageDisplay()}
+                        {this.state.currentReceiver!==null?this.messageDisplay():null}
                     </div>
                     <div className={"chat_friend_display"}>
                         {this.friendsDisplay()}
                     </div>
                 </div>
             );
+        }else if(loggedIn&&!friendsExists){
+            return <div>No friends</div>
         }else{
             return <div>Needs to login</div>
         }

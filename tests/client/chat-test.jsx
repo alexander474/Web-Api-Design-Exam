@@ -29,7 +29,7 @@ afterAll(() => {
 });
 
 
-test("Test new messages", async () => {
+test("Test new chat", async () => {
 
     overrideFetch(app);
 
