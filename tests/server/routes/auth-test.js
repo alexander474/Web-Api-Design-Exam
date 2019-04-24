@@ -52,7 +52,7 @@ test("Test create user and get data", async () =>{
     const agent = request.agent(app);
 
     let response = await agent
-        .post('/api/signup')
+        .posts('/api/signup')
         .send({userId, password:"bar"})
         .set('Content-Type', 'application/json');
 
@@ -85,7 +85,7 @@ test("Test create user, login in a different session and get data", async () =>{
 
     //do login, which will get a new cookie
     response = await agent
-        .post('/api/login')
+        .posts('/api/login')
         .send({userId, password:"bar"})
         .set('Content-Type', 'application/json');
     expect(response.statusCode).toBe(204);
@@ -110,7 +110,7 @@ test("Test login after logout", async () =>{
 
     //create user
     let response = await agent
-        .post('/api/signup')
+        .posts('/api/signup')
         .send({userId, password:"bar"})
         .set('Content-Type', 'application/json');
     expect(response.statusCode).toBe(201);
@@ -122,7 +122,7 @@ test("Test login after logout", async () =>{
 
 
     //now logout
-    response = await agent.post('/api/logout');
+    response = await agent.posts('/api/logout');
     expect(response.statusCode).toBe(204);
 
 
@@ -132,7 +132,7 @@ test("Test login after logout", async () =>{
 
     //do login
     response = await agent
-        .post('/api/login')
+        .posts('/api/login')
         .send({userId, password:"bar"})
         .set('Content-Type', 'application/json');
     expect(response.statusCode).toBe(204);

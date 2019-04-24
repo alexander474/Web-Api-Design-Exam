@@ -12,7 +12,12 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
 
 router.post('/signup', function(req, res){
 
-    const created = Users.createUser(req.body.userId, req.body.password);
+    const created = Users.createUser(req.body.email,
+        req.body.password,
+        req.body.firstName,
+        req.body.surName,
+        req.body.birthDate,
+        req.body.country);
 
     if(! created){
         res.status(400).send();
@@ -48,7 +53,13 @@ router.get('/user', function (req, res) {
         return;
     }
 
-    res.status(200).json({userId: req.user.id});
+    res.status(200).json({
+        email: req.user.email,
+        firstName: req.user.firstName,
+        surName: req.user.surName,
+        birthDate: req.user.birthDate,
+        country: req.user.country
+    });
 });
 
 

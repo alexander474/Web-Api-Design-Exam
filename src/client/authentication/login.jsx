@@ -8,14 +8,14 @@ export class Login extends React.Component{
         super(props);
 
         this.state = {
-            userId: "",
+            email: "",
             password: "",
             errorMsg: null
         };
     }
 
-    onUserIdChange = (event) =>{
-        this.setState({userId: event.target.value});
+    onEmailChange = (event) =>{
+        this.setState({email: event.target.value});
     };
 
     onPasswordChange = (event) => {
@@ -23,11 +23,11 @@ export class Login extends React.Component{
     };
 
     doLogIn = async () => {
-        const {userId, password} = this.state;
+        const {email, password} = this.state;
 
         const url = "/api/login";
 
-        const payload = {userId: userId, password: password};
+        const payload = {email: email, password: password};
 
         let response;
 
@@ -72,11 +72,11 @@ export class Login extends React.Component{
         return(
             <div>
                 <div>
-                    <p>User Id:</p>
+                    <p>Email:</p>
                     <input type="text"
-                           value={this.state.userId}
-                           onChange={this.onUserIdChange}
-                           id="userIdInput"
+                           value={this.state.email}
+                           onChange={this.onEmailChange}
+                           id="emailInput"
                     />
                 </div>
                 <div>

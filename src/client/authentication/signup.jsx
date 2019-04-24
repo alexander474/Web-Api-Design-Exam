@@ -7,15 +7,15 @@ export class SignUp extends React.Component{
         super(props);
 
         this.state = {
-            userId: "",
+            email: "",
             password: "",
             confirm: "",
             errorMsg: null
         };
     }
 
-    onUserIdChange = (event) => {
-        this.setState({userId: event.target.value, errorMsg: null});
+    onEmailChange = (event) => {
+        this.setState({email: event.target.value, errorMsg: null});
     };
 
     onPasswordChange = (event) => {
@@ -28,7 +28,7 @@ export class SignUp extends React.Component{
 
     doSignUp = async () => {
 
-        const {userId, password, confirm} = this.state;
+        const {email, password, confirm} = this.state;
 
         if(confirm !== password){
             this.setState({errorMsg: "Passwords do not match"});
@@ -37,7 +37,7 @@ export class SignUp extends React.Component{
 
         const url = "/api/signup";
 
-        const payload = {userId: userId, password: password};
+        const payload = {email: email, password: password};
 
         let response;
 
@@ -85,11 +85,11 @@ export class SignUp extends React.Component{
         return(
             <div>
                 <div>
-                    <p>User Id:</p>
+                    <p>Email:</p>
                     <input type="text"
-                           value={this.state.userId}
-                           onChange={this.onUserIdChange}
-                           id="userIdInput"
+                           value={this.state.email}
+                           onChange={this.onEmailChange}
+                           id="emailInput"
                     />
                 </div>
                 <div>

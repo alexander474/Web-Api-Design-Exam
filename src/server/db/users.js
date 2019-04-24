@@ -1,22 +1,16 @@
-
-/*
-    Here we "simulate" a database with in-memory Map.
-    Furthermore, we do not deal with the "proper" handling of
-    passwords. Passwords should NEVER be saved in plain text,
-    but rather hashed with secure algorithms like BCrypt.
- */
+// Used from teachers github repo
 
 const users = new Map();
 
 
-function getUser(id){
+function getUser(email){
 
-    return users.get(id);
+    return users.get(email);
 }
 
-function verifyUser(id, password){
+function verifyUser(email, password){
 
-    const user = getUser(id);
+    const user = getUser(email);
 
     if(user === undefined){
         return false;
@@ -25,18 +19,21 @@ function verifyUser(id, password){
     return user.password === password;
 }
 
-function createUser(id, password){
-
-    if(getUser(id) !== undefined ){
+function createUser(email, password, firstName, surName, birthDate, country){
+    if(getUser(email) !== undefined ){
         return false;
     }
 
     const user = {
-        id: id,
-        password: password
+        email: email,
+        password: password,
+        firstName: firstName,
+        surName: surName,
+        birthDate: birthDate,
+        country: country
     };
 
-    users.set(id, user);
+    users.set(email, user);
     return true;
 }
 
@@ -46,7 +43,7 @@ function resetAllUsers(){
 
 function initWithDefaultData(){
     resetAllUsers();
-    createUser("a", "a");
+    createUser("a@a.no", "a", "Alexander", "Bredesen", "090998", "Norway");
 }
 
 

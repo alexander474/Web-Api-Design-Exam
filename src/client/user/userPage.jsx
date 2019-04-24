@@ -1,17 +1,18 @@
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
+import User from "./user";
 
 
-export class Home extends React.Component {
+export class UserPage extends React.Component {
     constructor(props) {
         super(props);
     }
 
-    componentDidMount() {
-        if(this.props.user) {
-            this.props.fetchAndUpdateUserInfo();
-        }
+
+    displayUser(user){
+        return <User user={user}/>;
     }
+
 
 
     render() {
@@ -20,10 +21,10 @@ export class Home extends React.Component {
 
         return (
             <div>
-                <p>Welcome to my page {loggedIn?(user.email):("")}</p>
+                {loggedIn?this.displayUser(user):null}
             </div>
         );
     }
 }
 
-export default withRouter(Home);
+export default withRouter(UserPage);

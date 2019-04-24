@@ -53,7 +53,7 @@ function overrideFetch(app){
         if(!init || !init.method || init.method.toUpperCase() === "GET"){
             response = await agent.get(url);
         } else if(init.method.toUpperCase() === "POST"){
-            response = await agent.post(url)
+            response = await agent.posts(url)
                 .send(init.body)
                 .set('Content-Type', init.headers ? init.headers['Content-Type'] : "application/json");
         } else if(init.method.toUpperCase() === "PUT"){

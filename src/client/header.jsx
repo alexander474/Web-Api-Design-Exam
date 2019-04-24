@@ -27,14 +27,14 @@ export class Header extends React.Component {
         this.props.history.push("/");
     };
 
-    renderLoggedIn(userId) {
+    renderLoggedIn(user) {
         return (
             <div className="msgDiv">
-                <Link className="btn" to="/menu">
-                    Menu
-                </Link>
                 <Link className="btn" to="/chat">
                     Chat
+                </Link>
+                <Link className="btn" to="/user">
+                    {user.firstName}
                 </Link>
                 <div className="btn btnPartHeader" onClick={()=>this.doLogout()} id="logoutBtnId">
                     Logout
@@ -47,9 +47,6 @@ export class Header extends React.Component {
         return (
             <div className="msgDiv">
                 <div className="btnPartHeader">
-                    <Link className="btn" to="/menu">
-                        Menu
-                    </Link>
                     <Link className="btn" to="/chat">
                         Chat
                     </Link>
@@ -65,13 +62,13 @@ export class Header extends React.Component {
     }
 
     render() {
-        const userId = this.props.user!==null && this.props.user!==undefined ? this.props.user.userId : null;
+        const user = this.props.user!==null? this.props.user : null;
 
         let content;
-        if (userId === null) {
+        if (user === null) {
             content = this.renderNotLoggedIn();
         } else {
-            content = this.renderLoggedIn(userId);
+            content = this.renderLoggedIn(user);
         }
 
         return (

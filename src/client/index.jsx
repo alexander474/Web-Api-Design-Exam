@@ -7,11 +7,8 @@ import {Home} from "./home";
 import Login from "./authentication/login";
 import SignUp from "./authentication/signup";
 import Header from "./header";
-import Menus from "./menu/menus";
+import UserPage from "./user/userPage";
 import Chat from "./chat/chat";
-import AddDish from './dish/addDish'
-import EditDish from './dish/editDish'
-import EditMenu from './menu/editMenu'
 
 class App extends React.Component {
 
@@ -86,22 +83,10 @@ class App extends React.Component {
                         <Route exact path="/signup"
                                render={props => <SignUp {...props}
                                                         fetchAndUpdateUserInfo={this.fetchAndUpdateUserInfo}/>}/>
-                        <Route exact path="/menu"
-                               render={props => <Menus {...props}
-                                                        user={this.state.user}
-                                                        fetchAndUpdateUserInfo={this.fetchAndUpdateUserInfo}/>}/>
-                        <Route exact path="/editMenu/:id"
-                               render={props => <EditMenu {...props}
-                                                       user={this.state.user}
-                                                       fetchAndUpdateUserInfo={this.fetchAndUpdateUserInfo}/>}/>
-                        <Route exact path="/editDish/:id"
-                               render={props => <EditDish {...props}
-                                                       user={this.state.user}
-                                                       fetchAndUpdateUserInfo={this.fetchAndUpdateUserInfo}/>}/>
-                        <Route exact path="/addDish"
-                               render={props => <AddDish {...props}
-                                                       user={this.state.user}
-                                                       fetchAndUpdateUserInfo={this.fetchAndUpdateUserInfo}/>}/>
+                        <Route exact path="/user"
+                               render={props => <UserPage {...props}
+                                                      user={this.state.user}
+                                                      fetchAndUpdateUserInfo={this.fetchAndUpdateUserInfo}/>}/>
                         <Route exact path="/chat"
                                render={props => <Chat {...props}
                                                        user={this.state.user}

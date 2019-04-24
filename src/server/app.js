@@ -6,8 +6,6 @@ const LocalStrategy = require('passport-local').Strategy;
 const path = require('path');
 
 const authApi = require('./routes/auth-api');
-const menuApi = require('./routes/menu-api');
-const dishApi = require('./routes/dish-api');
 const Users = require('./db/users');
 
 const WsHandler = require('./ws/ws-handler');
@@ -32,30 +30,30 @@ app.use(passport.session());
 
 passport.use(new LocalStrategy(
     {
-        usernameField: 'userId',
+        usernameField: 'email',
         passwordField: 'password'
     },
-    function (userId, password, done) {
+    function (email, password, done) {
 
-        const ok = Users.verifyUser(userId, password);
+        const ok = Users.verifyUser(email, password);
 
         if (!ok) {
-            return done(null, false, {message: 'Invalid username/password'});
+            return done(null, false, {message: 'Invalid email/password'});
         }
 
-        const user = Users.getUser(userId);
+        const user = Users.getUser(email);
         return done(null, user);
     }
 ));
 
 
 passport.serializeUser(function (user, done) {
-    done(null, user.id);
+    done(null, user.email);
 });
 
-passport.deserializeUser(function (id, done) {
+passport.deserializeUser(function (email, done) {
 
-    const user = Users.getUser(id);
+    const user = Users.getUser(email);
 
     if (user !== null) {
         done(null, user);
@@ -69,8 +67,6 @@ passport.deserializeUser(function (id, done) {
 //--- Routes -----------
 WsHandler.init(app);
 app.use('/api', authApi);
-app.use('/api', menuApi);
-app.use('/api', dishApi);
 
 //handling 404 for /api calls
 app.all('/api*', (req,res) => {
