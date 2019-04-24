@@ -43,8 +43,9 @@ export class Header extends React.Component {
 
     onSearchChange = (e) => {
         this.setState({search: e.target.value});
-        this.fetchSearch();
-        console.log(this.state.searchResult);
+        if(this.state.search && this.state.search.length > 1) {
+            this.fetchSearch();
+        }
     };
 
 
@@ -62,7 +63,7 @@ export class Header extends React.Component {
                             {this.state.searchResult.length>0?(
                                 <ul>
                                     {this.state.searchResult.map((u,i) => {
-                                        return <li  key={"key_kk"+i%2}><Link to={"/user/"+u.email}>{u.firstName}</Link></li>
+                                        return <li  key={"key_kk"+i%2}><Link to={"/user/"+u.id}>{u.firstName+" "+u.surName}</Link></li>
                                     })}
                                 </ul>
                             ):null}
@@ -73,6 +74,9 @@ export class Header extends React.Component {
                 </Link>
                 <Link className="btn" to="/user">
                     {user.firstName}
+                </Link>
+                <Link className="btn" to="/requests">
+                    Requests
                 </Link>
                 <div className="btn btnPartHeader" onClick={()=>this.doLogout()} id="logoutBtnId">
                     Logout

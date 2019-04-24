@@ -1,20 +1,25 @@
 // Used from teachers github repo
 
-const users = new Map();
+const usersByEmail = new Map();
+const usersById = new Map();
+const friendRequestByEmail = new Map();
+let counter = 0;
 
+function getUserByEmail(email){
+    return usersByEmail.get(email);
+}
 
-function getUser(email){
-
-    return users.get(email);
+function getUserById(id){
+    return usersById.get(parseInt(id));
 }
 
 function getUsers(){
-    return Array.from(users.values())
+    return Array.from(usersByEmail.values())
 }
 
 function verifyUser(email, password){
 
-    const user = getUser(email);
+    const user = getUserByEmail(email);
 
     if(user === undefined){
         return false;
@@ -24,11 +29,13 @@ function verifyUser(email, password){
 }
 
 function createUser(email, password, firstName, surName, birthDate, country, friends){
-    if(getUser(email) !== undefined ){
+    const id = counter;
+    if(getUserByEmail(email) !== undefined && getUserById(id) !== undefined ){
         return false;
     }
 
     const user = {
+        id: id,
         email: email,
         password: password,
         firstName: firstName,
@@ -38,44 +45,94 @@ function createUser(email, password, firstName, surName, birthDate, country, fri
         friends: friends
     };
 
-    users.set(email, user);
+    usersByEmail.set(email, user);
+    usersById.set(id, user);
+    counter++;
+    return true;
+}
+
+function updateUser(user){
+    if(getUserByEmail(user.email) === undefined && getUserById(user.id) === undefined){
+        return;
+    }
+    usersByEmail.set(user.email, user);
+    usersById.set(user.id, user);
+}
+
+function sendFriendRequest(emailFrom, emailTo) {
+    if (getUserByEmail(emailFrom) === undefined || getUserByEmail(emailTo) === undefined) {
+        return false;
+    }
+    const list = friendRequestByEmail.get(emailTo);
+    if(list !== undefined && list.length>0){
+        list.push(emailFrom);
+        friendRequestByEmail.set(emailTo, list);
+    }else{
+        friendRequestByEmail.set(emailTo, [emailFrom]);
+    }
+    return true;
+}
+
+function getFriendRequests(email){
+    return friendRequestByEmail.get(email)
+}
+
+function removeFriendRequest(email, emailFrom){
+    if(getFriendRequests(email) === undefined){
+        return false;
+    }
+    const requests = getFriendRequests(email);
+    requests.splice(requests.indexOf(emailFrom), 1);
     return true;
 }
 
 function addFriend(emailOne, emailTwo){
-    if(getUser(emailOne) === undefined || getUser(emailTwo) === undefined){
+    if(getUserByEmail(emailOne) === undefined || getUserByEmail(emailTwo) === undefined){
         return false;
     }
-    const userOne = getUser(emailOne);
-    const userTwo = getUser(emailTwo);
+    const userOne = getUserByEmail(emailOne);
+    const userTwo = getUserByEmail(emailTwo);
     userOne.friends.push(userTwo.email);
     userTwo.friends.push(userOne.email);
+    updateUser(userOne);
+    updateUser(userTwo);
     return true;
 }
 
 function verifyFriend(emailOne, emailTwo){
-    if(getUser(emailOne) === undefined || getUser(emailTwo) === undefined){
+    if(getUserByEmail(emailOne) === undefined || getUserByEmail(emailTwo) === undefined){
         return false;
     }
-    const userOne = getUser(emailOne);
-    const userTwo = getUser(emailTwo);
+    const userOne = getUserByEmail(emailOne);
+    const userTwo = getUserByEmail(emailTwo);
 
-    return userOne.friends.contains(userTwo.email) && userTwo.friends.contains(userOne.email);
+    return verifyFriends(userOne.friends,userTwo.email) &&
+        verifyFriends(userTwo.friends,userOne.email);
+}
+
+function verifyFriends(friends, email){
+    let friend = false;
+    friends.forEach(f => {
+        if(f === email) friend = true
+    });
+    return friend
 }
 
 function removeFriend(emailOne, emailTwo){
     if(verifyFriend(emailOne, emailTwo)){
-        const userOne = getUser(emailOne);
-        const userTwo = getUser(emailTwo);
+        const userOne = getUserByEmail(emailOne);
+        const userTwo = getUserByEmail(emailTwo);
         userOne.friends.splice(userOne.friends.indexOf(emailTwo), 1);
         userTwo.friends.splice(userTwo.friends.indexOf(emailOne), 1);
+        updateUser(userOne);
+        updateUser(userTwo);
         return true;
     }
     return false;
 }
 
 function resetAllUsers(){
-    users.clear();
+    usersByEmail.clear();
 }
 
 function initWithDefaultData(){
@@ -83,8 +140,11 @@ function initWithDefaultData(){
     createUser("a@a.no", "a", "Alexander", "Bredesen", "090998", "Norway", []);
     createUser("foo@bar.no", "a", "Foo", "Bar", "090998", "Norway", []);
     createUser("b@b.no", "a", "b", "b", "090998", "Norway", []);
+    createUser("ba@b.no", "a", "ba", "b", "090998", "Norway", []);
+    createUser("bc@b.no", "a", "bc", "b", "090998", "Norway", []);
     addFriend("a@a.no", "foo@bar.no");
+    sendFriendRequest("ba@b.no", "a@a.no")
 }
 
 
-module.exports = {getUser, getUsers, verifyUser, removeFriend, createUser, addFriend, verifyFriend, resetAllUsers, initWithDefaultData};
+module.exports = {getUser: getUserByEmail, removeFriendRequest, getUserById, sendFriendRequest, getFriendRequests, getUsers, verifyUser, removeFriend, createUser, addFriend, verifyFriend, resetAllUsers, initWithDefaultData};

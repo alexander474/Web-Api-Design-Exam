@@ -11,23 +11,19 @@ export class UserPage extends React.Component {
         }
     }
 
-    componentWillUnmount() {
-        if(this.state.email !== null){
+    componentDidMount() {
+        if(this.props.match.params.email !== null){
             this.fetchUser();
         }
     }
 
     fetchUser = async () => {
-        const response = await fetch("api/friend/"+this.props.match.params.emai);
+        const response = await fetch("/api/friend/"+this.props.match.params.id);
         const body = await response.json();
-        this.setState({user: body})
+        this.setState({user: body});
+        await this.props.fetchAndUpdateUserInfo();
     };
 
-
-
-    displayUser(user){
-        return <User user={user}/>;
-    }
 
     render() {
         const user = this.props.user;
@@ -35,7 +31,9 @@ export class UserPage extends React.Component {
 
         return (
                 <div>
-                    {loggedIn ? this.displayUser(user) : null}
+                    {this.state.user !== null && loggedIn ?
+                        <User callback={this.fetchUser} loggedInUser={user} user={this.state.user}/>
+                        : null}
                 </div>
         );
 

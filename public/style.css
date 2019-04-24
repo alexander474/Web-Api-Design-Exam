@@ -13,7 +13,7 @@ body {
   border-bottom: 2px solid black;
   height: 50px;
   width: 100%;
-  display: inline-flex;
+  display: inline-block;
   justify-content: space-evenly;
 }
 
@@ -59,6 +59,7 @@ body {
 
 .btn_home {
   float: left;
+  margin-right: 100px;
 }
 
 ul {

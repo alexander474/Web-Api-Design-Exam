@@ -54,6 +54,7 @@ router.get('/user', function (req, res) {
     }
 
     res.status(200).json({
+        id: req.user.id,
         email: req.user.email,
         firstName: req.user.firstName,
         surName: req.user.surName,

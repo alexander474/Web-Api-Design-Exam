@@ -8,6 +8,8 @@ import Login from "./authentication/login";
 import SignUp from "./authentication/signup";
 import Header from "./header";
 import UserPage from "./user/userPage";
+import PrivateUserPage from "./user/privateUserPage";
+import Requests from "./user/requests";
 import Chat from "./chat/chat";
 
 class App extends React.Component {
@@ -84,13 +86,17 @@ class App extends React.Component {
                                render={props => <SignUp {...props}
                                                         fetchAndUpdateUserInfo={this.fetchAndUpdateUserInfo}/>}/>
                         <Route exact path="/user"
-                               render={props => <UserPage {...props}
+                               render={props => <PrivateUserPage {...props}
                                                       user={this.state.user}
                                                       fetchAndUpdateUserInfo={this.fetchAndUpdateUserInfo}/>}/>
-                        <Route exact path="/user/:email"
+                        <Route exact path="/user/:id"
                                render={props => <UserPage {...props}
                                                           user={this.state.user}
                                                           fetchAndUpdateUserInfo={this.fetchAndUpdateUserInfo}/>}/>
+                        <Route exact path="/requests"
+                               render={props => <Requests {...props}
+                                                                 user={this.state.user}
+                                                                 fetchAndUpdateUserInfo={this.fetchAndUpdateUserInfo}/>}/>
                         <Route exact path="/chat"
                                render={props => <Chat {...props}
                                                        user={this.state.user}
