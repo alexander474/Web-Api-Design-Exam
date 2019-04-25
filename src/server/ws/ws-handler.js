@@ -5,8 +5,6 @@ const Messages = require('../db/messages');
 
 let ews;
 
-let messages = [];
-let messageCount = 0;
 let connections = new Map();
 
 function init(app) {

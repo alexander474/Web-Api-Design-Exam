@@ -26,11 +26,6 @@ function getUserMessage(email) {
     return currentMessages;
 }
 
-
-function resetAllChats(){
-    chats.clear();
-}
-
 function initWithDefaultData(){
     createMessage("a@a.no", "foo@bar.no", "Hey");
     createMessage("foo@bar.no", "a@a.no", "Hey back!");

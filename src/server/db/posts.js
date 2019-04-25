@@ -47,19 +47,24 @@ function getUserAndFriendsPost(user){
     }
     let currentPosts = [];
     for(let i=0; i<posts.length; i++){
-        if(posts[i].email === user.email ||
-            user.friends.includes(posts[i].email)){
+        if(posts[i].email === user.email || (user.friends !== undefined &&
+            user.friends.includes(posts[i].email))){
             currentPosts.push(posts[i]);
         }
     }
     return currentPosts.sort((a,b) => a.date - b.date);
 }
 
+function clearPosts(){
+    posts.splice(0, posts.length)
+}
+
 
 function initWithDefaultData(){
+    clearPosts();
     createPost({email:"a@a.no", title: "a title", text: "example"});
     createPost({email:"b@b.no", title: "b title", text: "bexample"});
     createPost({email:"foo@bar.no", title: "foo title", text: "foo example"});
 }
 
-module.exports = {createPost, getPost, getPosts, getUserPosts, getUserAndFriendsPost, initWithDefaultData};
+module.exports = {createPost, getPost, getPosts, getUserPosts, getUserAndFriendsPost, initWithDefaultData, clearPosts};
