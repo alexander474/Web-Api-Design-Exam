@@ -21,6 +21,14 @@ function createPost(post){
     return true;
 }
 
+function deletePost(id){
+    if(getPost(id) === undefined){
+        return false;
+    }
+    posts.splice(posts.indexOf(id), 1);
+    return true;
+}
+
 function getPost(id){
     let post = null;
     for(let i=0; i<posts.length; i++){
@@ -56,7 +64,9 @@ function getUserAndFriendsPost(user){
 }
 
 function clearPosts(){
-    posts.splice(0, posts.length)
+    while(posts.length > 0){
+        posts.pop();
+    }
 }
 
 
@@ -67,4 +77,4 @@ function initWithDefaultData(){
     createPost({email:"foo@bar.no", title: "foo title", text: "foo example"});
 }
 
-module.exports = {createPost, getPost, getPosts, getUserPosts, getUserAndFriendsPost, initWithDefaultData, clearPosts};
+module.exports = {createPost, deletePost, getPost, getPosts, getUserPosts, getUserAndFriendsPost, initWithDefaultData, clearPosts};

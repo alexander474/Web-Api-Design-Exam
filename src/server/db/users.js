@@ -150,4 +150,4 @@ function initWithDefaultData(){
 }
 
 
-module.exports = {getUser: getUserByEmail, removeFriendRequest, getUserById, sendFriendRequest, getFriendRequests, getUsers, verifyUser, removeFriend, createUser, addFriend, verifyFriend, resetAllUsers, initWithDefaultData};
+module.exports = {getUser: getUserByEmail, updateUser, removeFriendRequest, getUserById, sendFriendRequest, getFriendRequests, getUsers, verifyUser, removeFriend, createUser, addFriend, verifyFriend, resetAllUsers, initWithDefaultData};

@@ -5,7 +5,7 @@ beforeEach(()=>{
     Posts.clearPosts();
 });
 
-test("Test create posts", () =>{
+test("Test create post", () =>{
     const email = "a@a.no";
     const title = "title";
     const text = "text";
@@ -24,6 +24,26 @@ test("Test create posts", () =>{
     expect(userPosts[0].email === getUserPostById.email).toBe(true);
 });
 
+test("Test remove post", () =>{
+    const email = "a@a.no";
+    const title = "title";
+    const text = "text";
+
+    Posts.createPost({email: email, title: title, text: text});
+
+    expect(Posts.getUserPosts(email).length).toBe(1);
+
+
+    let userPosts = Posts.getUserPosts(email);
+    let getUserPostById = Posts.getPost(userPosts[0].id);
+    expect(userPosts[0].email === getUserPostById.email).toBe(true);
+
+    Posts.deletePost(getUserPostById.id);
+
+    expect(Posts.getUserPosts(email).length).toBe(0);
+
+});
+
 
 test("Test get user and friends posts", () => {
     const emailOne = "a@a.no";
@@ -39,7 +59,7 @@ test("Test get user and friends posts", () => {
 
     expect(Posts.getUserPosts(emailOne).length).toBe(1);
     expect(Posts.getUserPosts(emailTwo).length).toBe(1);
-    expect(Posts.getUserAndFriendsPost(emailOne).length).toBe(2);
-    expect(Posts.getUserAndFriendsPost(emailTwo).length).toBe(2);
+    expect(Posts.getUserAndFriendsPost(Users.getUser(emailOne)).length).toBe(2);
+    expect(Posts.getUserAndFriendsPost(Users.getUser(emailTwo)).length).toBe(2);
 
 });

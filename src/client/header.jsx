@@ -18,12 +18,12 @@ export class Header extends React.Component {
         try {
             response = await fetch(url, { method: "post" });
         } catch (err) {
-            alert("Failed to connect to server: " + err);
+            //alert("Failed to connect to server: " + err);
             return;
         }
 
         if (response.status !== 204) {
-            alert("Error when connecting to server: status code " + response.status);
+            //alert("Error when connecting to server: status code " + response.status);
             return;
         }
 
@@ -89,6 +89,7 @@ export class Header extends React.Component {
         return (
             <div className="msgDiv">
                 <div className="btnPartHeader">
+                    <p>Not logged in</p>
                     <Link className="btn" to="/login">
                         LogIn
                     </Link>

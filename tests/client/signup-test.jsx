@@ -13,15 +13,23 @@ const {resetAllUsers, getUser, createUser} = require('../../src/server/db/users'
 beforeEach(resetAllUsers);
 
 
-function fillForm(driver, id, password, confirm){
+function fillForm(driver, email, firstName, surName, birthDate, country, password, confirm){
 
-    const userIdInput = driver.find("#userIdInput").at(0);
+    const emailInput = driver.find("#emailInput").at(0);
+    const firstNameInput = driver.find("#firstNameInput").at(0);
+    const surNameInput = driver.find("#surNameInput").at(0);
+    const birthDateInput = driver.find("#birthDateInput").at(0);
+    const countryInput = driver.find("#countryInput").at(0);
     const passwordInput = driver.find("#passwordInput").at(0);
     const confirmInput = driver.find("#confirmInput").at(0);
     const signUpBtn = driver.find("#signUpBtn").at(0);
 
 
-    userIdInput.simulate('change', {target: {value: id}});
+    emailInput.simulate('change', {target: {value: email}});
+    firstNameInput.simulate('change', {target: {value: firstName}});
+    surNameInput.simulate('change', {target: {value: surName}});
+    birthDateInput.simulate('change', {target: {value: birthDate}});
+    countryInput.simulate('change', {target: {value: country}});
     passwordInput.simulate('change', {target: {value: password}});
     confirmInput.simulate('change', {target: {value: confirm}});
 
@@ -42,7 +50,7 @@ test("Test password mismatch", async () => {
 
     expect(driver.html().includes(mismatch)).toEqual(false);
 
-    fillForm(driver, "foo", "123", "not-matching");
+    fillForm(driver, "foo@bar.no", "a", "a", "a", "a", "123",  "not-matching");
 
     const error = await asyncCheckCondition(
         () => {driver.update(); return driver.html().includes(mismatch)},
@@ -54,8 +62,13 @@ test("Test password mismatch", async () => {
 
 test("Create user", async () =>{
 
-    const userId = "Foo";
-    expect(getUser(userId)).toEqual(undefined);
+    const email = "Foo";
+    const firstName = "a";
+    const surName = "a";
+    const birthDate = "090998";
+    const country = "norway";
+    const password = "123";
+    expect(getUser(email)).toEqual(undefined);
 
     overrideFetch(app);
 
@@ -69,9 +82,8 @@ test("Create user", async () =>{
         </MemoryRouter>
     );
 
-    const password = "123";
 
-    fillForm(driver, userId, password, password);
+    fillForm(driver, email, firstName, surName, birthDate, country, password, password);
 
 
     const redirected = await asyncCheckCondition(
@@ -86,9 +98,13 @@ test("Create user", async () =>{
 
 test("Fail if user already exists", async () =>{
 
-    const userId = "Foo";
+    const email = "Foo";
+    const firstName = "a";
+    const surName = "a";
+    const birthDate = "090998";
+    const country = "norway";
     const password = "123";
-    createUser(userId, password);
+    createUser(email, password, firstName, surName, birthDate, country);
 
     overrideFetch(app);
 
@@ -102,10 +118,10 @@ test("Fail if user already exists", async () =>{
         </MemoryRouter>
     );
 
-    fillForm(driver, userId, password, password);
+    fillForm(driver, email, firstName, surName, birthDate, country, password, password);
 
     const failed = await asyncCheckCondition(
-        () => {driver.update(); return driver.html().includes('Invalid userId/password')},
+        () => {driver.update(); return driver.html().includes('Invalid email/password')},
         2000 ,200);
 
     expect(failed).toEqual(true);
