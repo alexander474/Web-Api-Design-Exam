@@ -1,3 +1,4 @@
+// inspiration from repo
 const React = require('react');
 const {mount} = require('enzyme');
 
@@ -5,11 +6,6 @@ const {overrideWebSocket, overrideFetch, asyncCheckCondition} = require('../myte
 
 const {Chat} = require('../../src/client/chat/chat');
 const {app} = require('../../src/server/app');
-
-/*
-    As for WS we are not using SuperTest directly, we need to start
-    the server manually, binding it on an ephemeral port;
- */
 
 let server;
 let port;
@@ -32,32 +28,38 @@ afterAll(() => {
 test("Test new chat", async () => {
 
     overrideFetch(app);
+    const driver = mount(<Chat user={
+        {
+            id: 0,
+            email: "c@c.no",
+            firstName: "a",
+            surName: "b",
+            birthDate: "090998",
+            country: "norway",
+            friends: ["foo@bar.no"]
+        }
 
-    const driver = mount(<Chat/>);
+    } />);
 
     const msg  = "Hello!";
 
     const predicate = () => {
-        //needed if changed HTML since component was mounted
         driver.update();
         const html = driver.html();
         return html.includes(msg);
     };
 
-    //message shouldn't be there... notice that this means this test will always run up to the timeout
     let displayedMessage;
 
-    //create a new message
-    const nameInput = driver.find('#nameInputId').at(0);
+    const selectFriendBtn = driver.find('#friendsChatSelectBtnId').at(0);
     const msgInput = driver.find('#msgInputId').at(0);
     const sendBtn = driver.find('#sendBtnId').at(0);
 
-    nameInput.simulate('change', {target: {value: "foo"}});
+    selectFriendBtn.simulate('submit');
     msgInput.simulate('change', {target: {value: msg}});
     sendBtn.simulate('submit');
 
 
-    //if WS is working correctly, now the message should appear
     displayedMessage = await asyncCheckCondition(predicate, 3000, 100);
     expect(displayedMessage).toBe(true);
 });

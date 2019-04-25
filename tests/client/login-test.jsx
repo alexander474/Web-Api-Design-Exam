@@ -13,13 +13,13 @@ const {resetAllUsers, getUser, createUser} = require('../../src/server/db/users'
 beforeEach(resetAllUsers);
 
 
-function fillForm(driver, id, password){
+function fillForm(driver, email, password){
 
-    const userIdInput = driver.find("#userIdInput").at(0);
+    const emailInput = driver.find("#emailInput").at(0);
     const passwordInput = driver.find("#passwordInput").at(0);
     const loginBtn = driver.find("#loginBtn").at(0);
 
-    userIdInput.simulate('change', {target: {value: id}});
+    emailInput.simulate('change', {target: {value: email}});
     passwordInput.simulate('change', {target: {value: password}});
 
     loginBtn.simulate('click');
@@ -35,7 +35,7 @@ test("Test fail login", async () => {
         </MemoryRouter>
     );
 
-    fillForm(driver, "foo", "123");
+    fillForm(driver, "foo@bar.no", "123");
 
     const error = await asyncCheckCondition(
         () => {driver.update(); return driver.html().includes("Invalid userId/password")},
@@ -44,12 +44,15 @@ test("Test fail login", async () => {
     expect(error).toEqual(true);
 });
 
-
 test("Test valid login", async () =>{
 
-    const userId = "Foo";
+    const email = "foo@bar.no";
     const password = "123";
-    createUser(userId, password);
+    const firstName = "a";
+    const surName = "b";
+    const birthDate = "090998";
+    const country = "norway";
+    createUser(email, password, firstName, surName, birthDate, country);
 
     overrideFetch(app);
 
@@ -63,7 +66,7 @@ test("Test valid login", async () =>{
         </MemoryRouter>
     );
 
-    fillForm(driver, userId, password);
+    fillForm(driver, email, password);
 
     const redirected = await asyncCheckCondition(
         () => {return page === "/"},

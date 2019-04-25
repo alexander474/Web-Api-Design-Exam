@@ -21,15 +21,15 @@ function init(app) {
         }
         connections.set(req.user.email, socket);
         console.log('Established a new WS message connection');
-        socket.send(JSON.stringify(Messages.getUserChats(req.user.email)));
+        socket.send(JSON.stringify(Messages.getUserMessage(req.user.email)));
         socket.on('message', fromClient => {
             const dto = JSON.parse(fromClient);
-            Messages.createMessage(dto.emailFrom, dto.emailTo, dto.text);
+            const created = Messages.createMessage(dto.emailFrom, dto.emailTo, dto.text);
             const receiver = connections.get(dto.emailTo);
             if(receiver) {
-                receiver.send(JSON.stringify(Messages.getChat(dto.emailFrom, dto.emailTo)));
+                receiver.send(JSON.stringify([created]));
             }
-                socket.send(JSON.stringify(Messages.getChat(dto.emailFrom, dto.emailTo)));
+                socket.send(JSON.stringify([created]));
         });
     });
 

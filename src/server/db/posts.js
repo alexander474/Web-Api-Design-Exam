@@ -4,6 +4,7 @@ let counter = 0;
 
 function createPost(post){
     const id = counter;
+    const date = new Date();
 
     if(getPost(id) !== null) return false;
 
@@ -12,6 +13,7 @@ function createPost(post){
         email: post.email,
         title: post.title,
         text: post.text,
+        date: date,
     };
 
     posts.push(create);
@@ -28,7 +30,7 @@ function getPost(id){
 }
 
 function getPosts(){
-    return posts;
+    return posts.sort((a,b) => a.date - b.date);
 }
 
 function getUserPosts(email){
@@ -36,7 +38,7 @@ function getUserPosts(email){
     for(let i=0; i<posts.length; i++){
         if(posts[i].email === email) userPosts.push(posts[i]);
     }
-    return userPosts;
+    return userPosts.sort((a,b) => a.date - b.date);
 }
 
 function getUserAndFriendsPost(user){
@@ -50,7 +52,7 @@ function getUserAndFriendsPost(user){
             currentPosts.push(posts[i]);
         }
     }
-    return currentPosts;
+    return currentPosts.sort((a,b) => a.date - b.date);
 }
 
 

@@ -28,7 +28,7 @@ function verifyUser(email, password){
     return user.password === password;
 }
 
-function createUser(email, password, firstName, surName, birthDate, country, friends){
+function createUser(email, password, firstName, surName, birthDate, country){
     const id = counter;
     if(getUserByEmail(email) !== undefined && getUserById(id) !== undefined ){
         return false;
@@ -42,7 +42,7 @@ function createUser(email, password, firstName, surName, birthDate, country, fri
         surName: surName,
         birthDate: birthDate,
         country: country,
-        friends: friends
+        friends: []
     };
 
     usersByEmail.set(email, user);
@@ -138,12 +138,13 @@ function resetAllUsers(){
 
 function initWithDefaultData(){
     resetAllUsers();
-    createUser("a@a.no", "a", "Alexander", "Bredesen", "090998", "Norway", []);
-    createUser("foo@bar.no", "a", "Foo", "Bar", "090998", "Norway", []);
-    createUser("b@b.no", "a", "b", "b", "090998", "Norway", []);
-    createUser("ba@b.no", "a", "ba", "b", "090998", "Norway", []);
-    createUser("bc@b.no", "a", "bc", "b", "090998", "Norway", []);
+    createUser("a@a.no", "a", "Alexander", "Bredesen", "090998", "Norway");
+    createUser("foo@bar.no", "a", "Foo", "Bar", "090998", "Norway");
+    createUser("b@b.no", "a", "b", "b", "090998", "Norway");
+    createUser("ba@b.no", "a", "ba", "b", "090998", "Norway");
+    createUser("bc@b.no", "a", "bc", "b", "090998", "Norway");
     addFriend("a@a.no", "foo@bar.no");
+    addFriend("a@a.no", "b@b.no");
     sendFriendRequest("ba@b.no", "a@a.no");
     sendFriendRequest("bc@b.no", "a@a.no");
 }

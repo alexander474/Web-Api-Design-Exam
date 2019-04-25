@@ -12,12 +12,14 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
 
 router.post('/signup', function(req, res){
 
-    const created = Users.createUser(req.body.email,
+    const created = Users.createUser(
+        req.body.email,
         req.body.password,
         req.body.firstName,
         req.body.surName,
         req.body.birthDate,
-        req.body.country);
+        req.body.country
+    );
 
     if(! created){
         res.status(400).send();

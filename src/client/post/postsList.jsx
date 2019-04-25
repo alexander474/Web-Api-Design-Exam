@@ -34,7 +34,7 @@ export class PostsList extends React.Component {
                 if(prev.posts === null){
                     return {posts: posts}
                 } else{
-                    return {posts: [...prev.posts, ...posts]}
+                    return {posts: [...posts, ...prev.posts].sort((a,b) => a.date - b.date)}
                 }
             })
         });
@@ -97,9 +97,9 @@ export class PostsList extends React.Component {
         let posts = <div><p>No posts to display</p></div>;
         if (this.state.posts !== null) {
             posts = <div>
-                {this.state.posts.map(m => {
+                {this.state.posts.map((m,i) => {
                     return (
-                        <div className={"post_element"} key={"msg_key_ls" + m.id}>
+                        <div className={"post_element"} key={"msg_key_ls" +(i*2%2)}>
                             <p className={"post_title"}>{m.title}</p>
                             <p className={"post_email"}>{m.email}</p>
                             <p className={"post_text"}>{m.text}</p>

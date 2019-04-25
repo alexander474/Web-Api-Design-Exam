@@ -9,7 +9,7 @@ test("Test fail login", async () =>{
 
     const response = await request(app)
         .post('/api/login')
-        .send({userId:'foo_' + (counter++), password:"bar"})
+        .send({email:"foo@bar" + (counter++)+".no", password:"a"})
         .set('Content-Type', 'application/json');
 
     expect(response.statusCode).toBe(401);
@@ -27,11 +27,11 @@ test("Test fail access data of non-existent user", async () =>{
 
 test("Test create user, but fail get data", async () =>{
 
-    const userId = 'foo_' + (counter++);
+    const email = "foo@bar" + (counter++)+".no";
 
     let response = await request(app)
         .post('/api/signup')
-        .send({userId, password:"bar"})
+        .send({email, password:"bar"})
         .set('Content-Type', 'application/json');
 
     expect(response.statusCode).toBe(201);
@@ -46,14 +46,14 @@ test("Test create user, but fail get data", async () =>{
 
 test("Test create user and get data", async () =>{
 
-    const userId = 'foo_' + (counter++);
+    const email = "foo@bar" + (counter++)+".no";
 
     //use same cookie jar for the HTTP requests
     const agent = request.agent(app);
 
     let response = await agent
-        .posts('/api/signup')
-        .send({userId, password:"bar"})
+        .post('/api/signup')
+        .send({email, password:"bar"})
         .set('Content-Type', 'application/json');
 
     expect(response.statusCode).toBe(201);
@@ -63,19 +63,19 @@ test("Test create user and get data", async () =>{
     response = await agent.get('/api/user');
 
     expect(response.statusCode).toBe(200);
-    expect(response.body.userId).toBe(userId);
+    expect(response.body.email).toBe(email);
     expect(response.body.password).toBeUndefined();
 });
 
 
 test("Test create user, login in a different session and get data", async () =>{
 
-    const userId = 'foo_' + (counter++);
+    const email = "foo@bar" + (counter++)+".no";
 
     //create user, but ignore cookie set with the HTTP response
     let response = await request(app)
         .post('/api/signup')
-        .send({userId, password:"bar"})
+        .send({email, password:"bar"})
         .set('Content-Type', 'application/json');
     expect(response.statusCode).toBe(201);
 
@@ -85,8 +85,8 @@ test("Test create user, login in a different session and get data", async () =>{
 
     //do login, which will get a new cookie
     response = await agent
-        .posts('/api/login')
-        .send({userId, password:"bar"})
+        .post('/api/login')
+        .send({email, password:"bar"})
         .set('Content-Type', 'application/json');
     expect(response.statusCode).toBe(204);
 
@@ -95,7 +95,7 @@ test("Test create user, login in a different session and get data", async () =>{
     response = await agent.get('/api/user');
 
     expect(response.statusCode).toBe(200);
-    expect(response.body.userId).toBe(userId);
+    expect(response.body.email).toBe(email);
     expect(response.body.password).toBeUndefined();
 });
 
@@ -103,15 +103,15 @@ test("Test create user, login in a different session and get data", async () =>{
 
 test("Test login after logout", async () =>{
 
-    const userId = 'foo_' + (counter++);
+    const email = "foo@bar" + (counter++)+".no";
 
     //use same cookie jar for the HTTP requests
     const agent = request.agent(app);
 
     //create user
     let response = await agent
-        .posts('/api/signup')
-        .send({userId, password:"bar"})
+        .post('/api/signup')
+        .send({email, password:"bar"})
         .set('Content-Type', 'application/json');
     expect(response.statusCode).toBe(201);
 
@@ -122,7 +122,7 @@ test("Test login after logout", async () =>{
 
 
     //now logout
-    response = await agent.posts('/api/logout');
+    response = await agent.post('/api/logout');
     expect(response.statusCode).toBe(204);
 
 
@@ -132,8 +132,8 @@ test("Test login after logout", async () =>{
 
     //do login
     response = await agent
-        .posts('/api/login')
-        .send({userId, password:"bar"})
+        .post('/api/login')
+        .send({email, password:"bar"})
         .set('Content-Type', 'application/json');
     expect(response.statusCode).toBe(204);
 

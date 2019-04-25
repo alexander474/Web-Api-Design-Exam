@@ -6,7 +6,6 @@ export class Chat extends React.Component {
         super(props);
         this.state = {
             text: "",
-            chat: null,
             currentReceiver: null,
             messages: null,
         }
@@ -24,12 +23,18 @@ export class Chat extends React.Component {
         if(this.socket) this.socket.close();
         this.socket = new WebSocket("ws://" + window.location.host + "/message");
         this.socket.onmessage = (e => {
-            const chats = JSON.parse(e.data).filter( c => c.emailTo===this.state.currentReceiver);
-            if(chats.length>0)this.onMessagesChange(chats);
+            const messages = JSON.parse(e.data).filter( m => (m.emailTo===this.state.currentReceiver&&m.emailFrom===this.props.user.email)||
+                (m.emailFrom===this.state.currentReceiver&&m.emailTo===this.props.user.email));
+            this.setState( prev => {
+                if(prev.messages === null){
+                    return {messages: messages}
+                } else{
+                    return {messages: [...prev.messages, ...messages]}
+                }
+            });
+            console.log(this.state.messages);
         });
     };
-
-
 
     sendMessage = (emailFrom, emailTo) => {
         if(this.state.text.length>0&&emailFrom!==null&&emailTo!==null) {
@@ -44,26 +49,13 @@ export class Chat extends React.Component {
     };
 
     onCurrentReceiverChange = (currentReceiver) => {
+        this.onMessagesChange([]);
+        this.fetchChat();
         this.setState({currentReceiver});
     };
 
-    onMessagesChange = (chats) => {
-        console.log(chats);
-        chats.chat.map(c =>{
-                if(this.state.currentReceiver===c.emailOne||this.state.currentReceiver===c.emailTwo){
-                    this.setState(prev => {
-                        if (prev.messages === null) {
-                            return {messages: c.chat}
-                        } else {
-                            return {messages: [...prev.messages, ...c.chat]}
-                        }
-                    });
-                }
-            }
-        );
-        console.log(this.state.chat);
-        console.log(this.state.messages);
-
+    onMessagesChange = (messages) => {
+        this.setState({messages});
     };
 
     onTextChange = (e) => {
@@ -80,11 +72,12 @@ export class Chat extends React.Component {
                     <textarea  cols="50"
                                rows="4"
                                value={this.state.text}
+                               id="msgInputId"
                                onChange={this.onTextChange} />
                 </div>
                 <br/>
                 <div
-                    id="sendId"
+                    id="sendBtnId"
                     className="btn"
                     onClick={() => this.sendMessage(this.props.user.email, this.state.currentReceiver)}>
                     Send
@@ -103,6 +96,7 @@ export class Chat extends React.Component {
                             <li
                             className={"chat_friends_email"}
                             key={"ii_key_"+f}
+                            id="friendsChatSelectBtnId"
                             onClick={()=>this.onCurrentReceiverChange(f)}>
                             {f}
                             </li>
@@ -116,22 +110,16 @@ export class Chat extends React.Component {
     messageDisplay() {
         const currentReceiver = this.state.currentReceiver;
         let messages = <div/>;
-        if (this.state.chat !== null) {
+        if (this.state.messages !== null) {
             messages = <div>
-                {this.state.chat.map(c =>{
-                    if(currentReceiver===c.emailOne||currentReceiver===c.emailTwo){
-                        this.onMessagesChange(c.chat);
-                        return this.state.messages.map(m => {
-                            this.onMessagesChange(m);
-                            let name = m.emailFrom;
-                            if(m.emailFrom===this.props.user.email){
-                                name = this.props.user.email
-                            }
-                            return <p key={"msg_key" + m.id+m.text}> {name + ": " + m.text}</p>
-                        })
+                {this.state.messages.map(m => {
+                    let name = m.emailFrom;
+                    if(m.emailFrom===this.props.user.email){
+                        name = this.props.user.email
                     }
+                    return <p key={"msg_key" + m.id+m.text}> {name + ": " + m.text}</p>
+                })
                 }
-                )}
                 </div>;
         }
         return messages

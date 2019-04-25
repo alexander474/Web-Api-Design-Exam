@@ -8,6 +8,10 @@ export class SignUp extends React.Component{
 
         this.state = {
             email: "",
+            firstName: "",
+            surName: "",
+            birthDate: "",
+            country: "",
             password: "",
             confirm: "",
             errorMsg: null
@@ -16,6 +20,22 @@ export class SignUp extends React.Component{
 
     onEmailChange = (event) => {
         this.setState({email: event.target.value, errorMsg: null});
+    };
+
+    onFirstNameChange = (event) => {
+        this.setState({firstName: event.target.value, errorMsg: null});
+    };
+
+    onSurNameChange = (event) => {
+        this.setState({surName: event.target.value, errorMsg: null});
+    };
+
+    onBirthDateChange = (event) => {
+        this.setState({birthDate: event.target.value, errorMsg: null});
+    };
+
+    onCountryChange = (event) => {
+        this.setState({country: event.target.value, errorMsg: null});
     };
 
     onPasswordChange = (event) => {
@@ -28,7 +48,7 @@ export class SignUp extends React.Component{
 
     doSignUp = async () => {
 
-        const {email, password, confirm} = this.state;
+        const {email, firstName, surName, birthDate, country, password, confirm} = this.state;
 
         if(confirm !== password){
             this.setState({errorMsg: "Passwords do not match"});
@@ -37,7 +57,14 @@ export class SignUp extends React.Component{
 
         const url = "/api/signup";
 
-        const payload = {email: email, password: password};
+        const payload = {
+            email: email,
+            firstName: firstName,
+            surName: surName,
+            birthDate: birthDate,
+            country: country,
+            password: password,
+        };
 
         let response;
 
@@ -93,6 +120,38 @@ export class SignUp extends React.Component{
                     />
                 </div>
                 <div>
+                    <p>Firstname:</p>
+                    <input type="text"
+                           value={this.state.firstName}
+                           onChange={this.onFirstNameChange}
+                           id="firstNameInput"
+                    />
+                </div>
+                <div>
+                    <p>Surname:</p>
+                    <input type="text"
+                           value={this.state.surName}
+                           onChange={this.onSurNameChange}
+                           id="surNameInput"
+                    />
+                </div>
+                <div>
+                    <p>Birthday:</p>
+                    <input type="text"
+                           value={this.state.birthDate}
+                           onChange={this.onBirthDateChange}
+                           id="emailInput"
+                    />
+                </div>
+                <div>
+                    <p>Country:</p>
+                    <input type="text"
+                           value={this.state.country}
+                           onChange={this.onCountryChange}
+                           id="emailInput"
+                    />
+                </div>
+                <div>
                     <p>Password:</p>
                     <input type="password"
                            value={this.state.password}
@@ -119,3 +178,4 @@ export class SignUp extends React.Component{
 }
 
 export default withRouter(SignUp);
+

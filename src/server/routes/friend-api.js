@@ -30,6 +30,8 @@ router.get("/friend/:id", (req, res) => {
 });
 
 function verifyFriends(friends, email){
+    if(friends === undefined) return false;
+    else if(!(friends instanceof Array)) return false;
     let friend = false;
     friends.forEach(f => {
         if(f === email) friend = true
