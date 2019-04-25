@@ -1,3 +1,4 @@
+// used code from repo
 const request = require('supertest');
 const {app} = require('../../../src/server/app');
 
@@ -31,7 +32,14 @@ test("Test create user, but fail get data", async () =>{
 
     let response = await request(app)
         .post('/api/signup')
-        .send({email, password:"bar"})
+        .send({
+            email,
+            password:"bar",
+            firstName: "foo",
+            surName: "bar",
+            birthDate: "090998",
+            country: "norway",
+        })
         .set('Content-Type', 'application/json');
 
     expect(response.statusCode).toBe(201);
@@ -53,7 +61,14 @@ test("Test create user and get data", async () =>{
 
     let response = await agent
         .post('/api/signup')
-        .send({email, password:"bar"})
+        .send({
+            email,
+            password:"bar",
+            firstName: "foo",
+            surName: "bar",
+            birthDate: "090998",
+            country: "norway",
+        })
         .set('Content-Type', 'application/json');
 
     expect(response.statusCode).toBe(201);
@@ -75,7 +90,14 @@ test("Test create user, login in a different session and get data", async () =>{
     //create user, but ignore cookie set with the HTTP response
     let response = await request(app)
         .post('/api/signup')
-        .send({email, password:"bar"})
+        .send({
+            email,
+            password:"bar",
+            firstName: "foo",
+            surName: "bar",
+            birthDate: "090998",
+            country: "norway",
+        })
         .set('Content-Type', 'application/json');
     expect(response.statusCode).toBe(201);
 
@@ -86,7 +108,14 @@ test("Test create user, login in a different session and get data", async () =>{
     //do login, which will get a new cookie
     response = await agent
         .post('/api/login')
-        .send({email, password:"bar"})
+        .send({
+            email,
+            password:"bar",
+            firstName: "foo",
+            surName: "bar",
+            birthDate: "090998",
+            country: "norway",
+        })
         .set('Content-Type', 'application/json');
     expect(response.statusCode).toBe(204);
 
@@ -111,7 +140,14 @@ test("Test login after logout", async () =>{
     //create user
     let response = await agent
         .post('/api/signup')
-        .send({email, password:"bar"})
+        .send({
+            email,
+            password:"bar",
+            firstName: "foo",
+            surName: "bar",
+            birthDate: "090998",
+            country: "norway",
+        })
         .set('Content-Type', 'application/json');
     expect(response.statusCode).toBe(201);
 
@@ -133,7 +169,14 @@ test("Test login after logout", async () =>{
     //do login
     response = await agent
         .post('/api/login')
-        .send({email, password:"bar"})
+        .send({
+            email,
+            password:"bar",
+            firstName: "foo",
+            surName: "bar",
+            birthDate: "090998",
+            country: "norway",
+        })
         .set('Content-Type', 'application/json');
     expect(response.statusCode).toBe(204);
 

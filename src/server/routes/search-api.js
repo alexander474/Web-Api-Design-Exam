@@ -29,10 +29,10 @@ router.get("/search/:key", (req, res) => {
             match = true;
         }
         if(!foundUsers.includes(copy) && currentUser !== req.user && match === true) {
-            foundUsers.push(copy)
+            foundUsers.push(copy);
         }
     }
-    res.send(JSON.stringify(foundUsers));
+    res.json(foundUsers);
 });
 
 module.exports = router;
