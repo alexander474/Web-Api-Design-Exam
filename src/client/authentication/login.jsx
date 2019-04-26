@@ -9,8 +9,8 @@ export class Login extends React.Component{
         super(props);
 
         this.state = {
-            email: "a@a.no",
-            password: "a",
+            email: "",
+            password: "",
             errorMsg: null
         };
     }

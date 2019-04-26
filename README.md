@@ -17,6 +17,9 @@ There might be some bugs with the heroku upload that doesnt
 > yarn test
 ```
 
+#### coverage
+
+
 ### Information and extras
 * Homepage "/" shows the current posts posted by you or any of you're friends. 
 * Chat shows you're friends on right side and by clicking on one of them you will se the chat
