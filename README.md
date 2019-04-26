@@ -1,11 +1,11 @@
 # Web-Api-Design-Exam
 
 ### How to run
-´´´bash
+```bash
 > yarn dev
 > Open localhost:8080
 > Login (email: a@a.no, password: a) or make you're own user
-´´´
+```
 
 ### Information and extras
 * Homepage "/" shows the current posts posted by you or any of you're friends. 
@@ -21,7 +21,7 @@ you can select a friend and you will then se the persons profile. You can se the
 with them, if not then only the name and a button to add them as a friend (send a request) and they
 get a request under their request page.
 
-Every time i used some inspiration from the course repository on github i added a mark first line in 
+> Every time i used some inspiration from the course repository on github i added a mark first line in 
 the file.
 
 
