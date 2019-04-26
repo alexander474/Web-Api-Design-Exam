@@ -18,7 +18,7 @@ There might be some bugs with the heroku upload that doesnt
 ```
 
 #### coverage
-
+All files % Stmts = 51.73 %
 
 ### Information and extras
 * Homepage "/" shows the current posts posted by you or any of you're friends. 
