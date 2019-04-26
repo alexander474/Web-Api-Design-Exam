@@ -7,6 +7,11 @@
 > Login (email: a@a.no, password: a) or make you're own user
 ```
 
+### How to test
+```bash
+> yarn test
+```
+
 ### Information and extras
 * Homepage "/" shows the current posts posted by you or any of you're friends. 
 * Chat shows you're friends on right side and by clicking on one of them you will se the chat
