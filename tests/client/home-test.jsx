@@ -11,7 +11,7 @@ const email = "foo@bar.no";
 let server;
 let port;
 
-/**
+
 beforeAll(done => {
 
     server = app.listen(0, ()=> {
@@ -55,5 +55,5 @@ test("Test logged in", async () => {
 
     const html = driver.html();
     expect(html.includes(u.email)).toEqual(true);
-});**/
+});
 

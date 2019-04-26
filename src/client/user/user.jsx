@@ -99,4 +99,4 @@ export class User extends React.Component {
     };
 }
 
-export default User;
+export default withRouter(User);

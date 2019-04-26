@@ -25,27 +25,9 @@ function fillForm(driver, email, password){
 
     loginBtn.simulate('click');
 }
-/**
-test("Test fail login", async () => {
 
-    overrideFetch(app);
 
-    const driver = mount(
-        <MemoryRouter initialEntries={["/login"]}>
-            <Login/>
-        </MemoryRouter>
-    );
-
-    fillForm(driver, "foo@bar.no", "123");
-
-    const error = await asyncCheckCondition(
-        () => {driver.update(); return driver.html().includes("Invalid userId/password")},
-        2000 ,200);
-
-    expect(error).toEqual(true);
-});**/
-/**
-test("Test valid login", async () =>{
+test("Test form", async () =>{
 
     const email = "foo@bar.no";
     const password = "123";
@@ -69,9 +51,6 @@ test("Test valid login", async () =>{
 
     fillForm(driver, email, password);
 
-    const redirected = await asyncCheckCondition(
-        () => {return page === "/"},
-        2000 ,200);
-
-    expect(redirected).toEqual(true);
-});**/
+    expect(driver.find("#emailInput").length>0).toEqual(true);
+    expect(driver.find("#passwordInput").length>0).toEqual(true);
+});
