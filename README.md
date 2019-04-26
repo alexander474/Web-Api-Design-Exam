@@ -1,7 +1,9 @@
 # Web-Api-Design-Exam
 
 #### Site launched at heroku
-[Website](https://webexam.herokuapp.com)
+> [Website](https://webexam.herokuapp.com) 
+There might be some bugs with the heroku upload that doesnt
+ appear on the local build. If you get some bugs, just refresh page
 
 ### How to run
 ```bash
