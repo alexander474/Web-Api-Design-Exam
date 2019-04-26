@@ -8,7 +8,7 @@ router.get("/friend/request", (req, res) => {
         res.status(401).send();
         return;
     }
-    res.status(200).json(User.getFriendRequests(req.user.email))
+    res.status(200).json(User.getFriendRequests(req.user.email));
 });
 
 router.delete("/friend/request/:email", (req, res) => {

@@ -1,3 +1,4 @@
+// https://github.com/arcuri82/web_development_and_api_design
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
 
@@ -132,7 +133,6 @@ export class Chat extends React.Component {
     };
 
 
-    //https://stackoverflow.com/questions/1500260/detect-urls-in-text-with-javascript
     handleText = (text) => {
         const urlRegex = /(https?:\/\/[^\s]+)/g;
         const newText = text.replace(urlRegex, (url) => {

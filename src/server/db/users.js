@@ -1,4 +1,4 @@
-// Used from teachers github repo
+// https://github.com/arcuri82/web_development_and_api_design
 
 const usersByEmail = new Map();
 const usersById = new Map();
@@ -67,7 +67,10 @@ function sendFriendRequest(emailFrom, emailTo) {
     }else{
         friendRequestByEmail.set(emailTo, [emailFrom]);
     }
-    return true;
+    if(getFriendRequests(emailTo)!==undefined) {
+        return true;
+    }
+    return false;
 }
 
 function getFriendRequests(email){

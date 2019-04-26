@@ -1,4 +1,4 @@
-// used code from repo
+// https://github.com/arcuri82/web_development_and_api_design
 const request = require('supertest');
 const {app} = require('../../../src/server/app');
 

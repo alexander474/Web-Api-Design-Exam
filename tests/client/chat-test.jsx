@@ -1,4 +1,4 @@
-// inspiration from repo
+// https://github.com/arcuri82/web_development_and_api_design
 const React = require('react');
 const {mount} = require('enzyme');
 

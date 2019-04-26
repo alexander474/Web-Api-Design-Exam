@@ -1,3 +1,4 @@
+// https://github.com/arcuri82/web_development_and_api_design
 const React = require('react');
 const {mount} = require('enzyme');
 const {MemoryRouter} = require('react-router-dom');
@@ -45,7 +46,7 @@ test("Test logged in", async () => {
     expect(html.includes(notLoggedInText)).toEqual(false);
 });
 
-/**
+
 test("Test do logout", async () => {
 
     overrideFetch(app);
@@ -81,4 +82,4 @@ test("Test do logout", async () => {
     expect(changed).toEqual(true);
 
     expect(page).toEqual("/");
-});**/
+});
