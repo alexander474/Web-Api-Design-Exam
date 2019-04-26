@@ -25,22 +25,22 @@ get a request under their request page.
 the file.
 
 ### Requirements
--[x] When the application starts, you must have some existing fake/test data representing valid
+- [x] When the application starts, you must have some existing fake/test data representing valid
     users.
     Should be possible to register new users.
--[x] Each user should have a page displaying his/her information (e.g., name, surname, date of birth
+- [x] Each user should have a page displaying his/her information (e.g., name, surname, date of birth
     and location).
--[x] A user should be able to post new messages on his/her “timeline”, which should be displayed in
+- [x] A user should be able to post new messages on his/her “timeline”, which should be displayed in
     chronological order together in the same page with the user’s info.
--[x] Should be possible to search for existing users.
--[x] Users can send “friendship” requests to other users. This latter will decide whether to accept it or
+- [x] Should be possible to search for existing users.
+- [x] Users can send “friendship” requests to other users. This latter will decide whether to accept it or
     not.
--[x] Two friends can see each other timeline / user-details, but not the ones of the other users they
+- [x] Two friends can see each other timeline / user-details, but not the ones of the other users they
     are not friend with.
--[x] The home of a user will be the merged timeline of all of his/her friends, in chronological order,
+- [x] The home of a user will be the merged timeline of all of his/her friends, in chronological order,
     updated in real-time (e.g., using WebSockets).
--[x] Should have a live-chat (using WebSockets) for friends.
--[x] When a message contains a URL (e.g., link to an external web page), that should be displayed as
+- [x] Should have a live-chat (using WebSockets) for friends.
+- [x] When a message contains a URL (e.g., link to an external web page), that should be displayed as
     an actual clickable link. Pay particular attention to the security aspects of having such a
     functionality.
 
