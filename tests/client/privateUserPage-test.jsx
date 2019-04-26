@@ -1,5 +1,5 @@
 // https://github.com/arcuri82/web_development_and_api_design
-import User from "../../src/client/user/user";
+import PrivateUserPage from "../../src/client/user/privateUserPage";
 
 const React = require('react');
 const {mount} = require('enzyme');
@@ -42,7 +42,7 @@ test("Test show user", async () => {
 
     const driver = mount(
         <MemoryRouter initialEntries={["/user"]}>
-            <User callback={callback()} loggedInUser={u} user={u} history={history}/>
+            <PrivateUserPage fetchAndUpdateUserInfo={callback()} user={u} history={history}/>
         </MemoryRouter>
     );
 
@@ -51,36 +51,6 @@ test("Test show user", async () => {
     expect(html.includes(surName)).toEqual(true);
     expect(html.includes(birthDate)).toEqual(true);
     expect(html.includes(email)).toEqual(true);
-});
-
-test("Test public user", async () => {
-    const email = "foo@bar.no";
-    const firstName = "foo";
-    const surName = "bar";
-    const birthDate = "090998";
-    const country = "norway";
-    const friends = [];
-
-    let u = {id: 0, email: email, firstName: firstName, surName: surName, birthDate: birthDate, country: country, friends: friends};
-    let u2 = {id: 1, email: "a@a.no", firstName: firstName, surName: surName, birthDate: birthDate, country: country, friends: friends};
-
-    const callback = () => new Promise(resolve => resolve());
-
-    let page = null;
-    const history = {push: (h) => {page=h}};
-
-    const driver = mount(
-        <MemoryRouter initialEntries={["/user/"+u2.id]}>
-            <User callback={callback()} loggedInUser={u} user={u2} history={history}/>
-        </MemoryRouter>
-    );
-
-    const html = driver.html();
-    expect(html.includes(firstName)).toEqual(true);
-    expect(html.includes(surName)).toEqual(true);
-    expect(html.includes(birthDate)).toEqual(false);
-    expect(html.includes(country)).toEqual(false);
-    expect(html.includes(email)).toEqual(false);
 });
 
 

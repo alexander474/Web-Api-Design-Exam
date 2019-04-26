@@ -42,24 +42,38 @@ test("Test new chat", async () => {
     } />);
 
     const msg  = "Hello!";
+    const msg2  = "hey! https://www.google.com";
 
-    const predicate = () => {
+
+    const predicate = (message) => {
         driver.update();
         const html = driver.html();
-        return html.includes(msg);
+        return html.includes(message);
     };
 
     let displayedMessage;
 
+    fillForm(driver, msg);
+
+
+    displayedMessage = await asyncCheckCondition(()=>predicate(msg), 3000, 100);
+    expect(displayedMessage).toBe(true);
+    expect(driver.html().includes(msg2)).toBe(false);
+
+    fillForm(driver, msg2);
+
+    let displayedMessage2;
+
+    displayedMessage2 = await asyncCheckCondition(()=>predicate(msg2), 3000, 100);
+    expect(displayedMessage2).toBe(true);
+});
+
+function fillForm(driver, message) {
     const selectFriendBtn = driver.find('#friendsChatSelectBtnId').at(0);
     const msgInput = driver.find('#msgInputId').at(0);
     const sendBtn = driver.find('#sendBtnId').at(0);
 
     selectFriendBtn.simulate('submit');
-    msgInput.simulate('change', {target: {value: msg}});
+    msgInput.simulate('change', {target: {value: message}});
     sendBtn.simulate('submit');
-
-
-    displayedMessage = await asyncCheckCondition(predicate, 3000, 100);
-    expect(displayedMessage).toBe(true);
-});
+}

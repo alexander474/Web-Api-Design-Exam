@@ -44,7 +44,7 @@ test("Test form", async () =>{
     const history = {push: (h) => {page=h}};
 
     const driver = mount(
-        <MemoryRouter initialEntries={["/signup"]}>
+        <MemoryRouter initialEntries={["/login"]}>
             <Login fetchAndUpdateUserInfo={fetchAndUpdateUserInfo} history={history} />
         </MemoryRouter>
     );
@@ -53,4 +53,5 @@ test("Test form", async () =>{
 
     expect(driver.find("#emailInput").length>0).toEqual(true);
     expect(driver.find("#passwordInput").length>0).toEqual(true);
+
 });
