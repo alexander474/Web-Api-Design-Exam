@@ -28,6 +28,7 @@ function getUserMessage(email) {
 
 function initWithDefaultData(){
     createMessage("a@a.no", "foo@bar.no", "Hey");
+    createMessage("a@a.no", "foo@bar.no", "Hey see this: https://www.google.com");
     createMessage("foo@bar.no", "a@a.no", "Hey back!");
     createMessage("b@b.no", "a@a.no", "Hey From B");
 }

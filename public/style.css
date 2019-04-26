@@ -17,6 +17,10 @@ body {
   justify-content: space-evenly;
 }
 
+.notLoggedInText{
+  display: inline-block;
+}
+
 .msgDiv {
   display: inline-flex;
   align-items: center;

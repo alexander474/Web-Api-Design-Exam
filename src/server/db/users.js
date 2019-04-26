@@ -18,9 +18,7 @@ function getUsers(){
 }
 
 function verifyUser(email, password){
-
     const user = getUserByEmail(email);
-
     if(user === undefined){
         return false;
     }
@@ -33,7 +31,6 @@ function createUser(email, password, firstName, surName, birthDate, country){
     if(getUserByEmail(email) !== undefined && getUserById(id) !== undefined ){
         return false;
     }
-
     const user = {
         id: id,
         email: email,
@@ -44,7 +41,6 @@ function createUser(email, password, firstName, surName, birthDate, country){
         country: country,
         friends: []
     };
-
     usersByEmail.set(email, user);
     usersById.set(id, user);
     counter++;
@@ -52,11 +48,12 @@ function createUser(email, password, firstName, surName, birthDate, country){
 }
 
 function updateUser(user){
-    if(getUserByEmail(user.email) === undefined && getUserById(user.id) === undefined){
+    if(getUserByEmail(user.email) === undefined && getUserById(parseInt(user.id)) === undefined){
         return;
     }
     usersByEmail.set(user.email, user);
-    usersById.set(user.id, user);
+    usersById.set(parseInt(user.id), user);
+    return true;
 }
 
 function sendFriendRequest(emailFrom, emailTo) {

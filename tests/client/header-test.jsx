@@ -26,7 +26,13 @@ test("Test not logged in", async () => {
 
 test("Test logged in", async () => {
 
-    const user = {userId: "Foo"};
+    const email = "foo@bar.no";
+    const firstName = "a";
+    const surName = "a";
+    const birthDate = "090998";
+    const country = "norway";
+
+    const user = {email, firstName, surName, birthDate, country};
     const updateLoggedInUser = () => {};
 
     const driver = mount(
@@ -38,26 +44,34 @@ test("Test logged in", async () => {
     const html = driver.html();
     expect(html.includes(notLoggedInText)).toEqual(false);
 });
+
 /**
 test("Test do logout", async () => {
 
     overrideFetch(app);
 
-    const user = {userId: "Foo"};
-    const updateLoggedInUser = (id) => {user.userId = id};
+    const email = "foo@bar.no";
+    const firstName = "a";
+    const surName = "a";
+    const birthDate = "090998";
+    const country = "norway";
+
+    let u = {email, firstName, surName, birthDate, country};
+    const updateLoggedInUser = (user) => {u = user};
     let page = null;
     const history = {push: (h) => {page=h}};
 
     const driver = mount(
         <MemoryRouter initialEntries={["/home"]}>
-            <Header user={user} updateLoggedInUser={updateLoggedInUser} history={history} />
+            <Header user={u} updateLoggedInUser={updateLoggedInUser} history={history} />
         </MemoryRouter>
     );
 
     const html = driver.html();
-    expect(html.includes(notLoggedInText)).toEqual(false);
-
     const logoutBtn = driver.find("#logoutBtnId").at(0);
+    expect(html.includes(notLoggedInText)).toEqual(false);
+    expect(logoutBtn.length>0).toBe(true);
+
     logoutBtn.simulate('click');
 
     const changed = await asyncCheckCondition(() => {

@@ -44,6 +44,36 @@ router.post('/logout', function(req, res){
     res.status(204).send();
 });
 
+
+router.put('/user/:id', function (req, res) {
+
+    if(! req.user){
+        res.status(401).send();
+        return;
+    }
+    const id = req.params["id"];
+    if(parseInt(id) === parseInt(req.body.id) &&
+        parseInt(id) === parseInt(req.user.id) &&
+        req.body.email === req.user.email) {
+
+        const newUser = {
+            id: req.user.id,
+            email: req.user.email,
+            password: req.user.password,
+            firstName: req.body.firstName,
+            surName: req.body.surName,
+            birthDate: req.body.birthDate,
+            country: req.body.country,
+            friends: req.user.friends
+        };
+
+        Users.updateUser(newUser);
+        res.status(201).send();
+    }else{
+        res.status(404).send();
+    }
+});
+
 /*
     Just return the id of the user, if the request is
     authenticated with a valid session cookie

@@ -186,3 +186,49 @@ test("Test login after logout", async () =>{
     expect(response.statusCode).toBe(200);
 });
 
+test("Test update user", async () =>{
+
+    const email = "foo@bar" + (counter++)+".no";
+
+    //use same cookie jar for the HTTP requests
+    const agent = request.agent(app);
+
+    let response = await agent
+        .post('/api/signup')
+        .send({
+            email,
+            password:"bar",
+            firstName: "foo",
+            surName: "bar",
+            birthDate: "090998",
+            country: "norway",
+        })
+        .set('Content-Type', 'application/json');
+
+    expect(response.statusCode).toBe(201);
+
+
+    //using same cookie got from previous HTTP call
+    response = await agent.get('/api/user');
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body.email).toBe(email);
+    expect(response.body.id!==undefined).toBe(true);
+    expect(response.body.password).toBeUndefined();
+
+    const newFirstName = "newFirstName";
+    await agent
+        .put('/api/user/'+response.body.id)
+        .send({
+            email,
+            id: response.body.id,
+            firstName: newFirstName,
+            surName: "bar",
+            birthDate: "090998",
+            country: "norway",
+        })
+        .set('Content-Type', 'application/json');
+
+    const responseAfterUpdate = await agent.get('/api/user');
+    expect(responseAfterUpdate.body.firstName).toBe(newFirstName);
+});

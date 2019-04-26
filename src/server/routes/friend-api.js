@@ -8,7 +8,18 @@ router.get("/friend/request", (req, res) => {
         res.status(401).send();
         return;
     }
-    res.json(User.getFriendRequests(req.user.email))
+    res.status(200).json(User.getFriendRequests(req.user.email))
+});
+
+router.delete("/friend/request/:email", (req, res) => {
+    if(! req.user){
+        res.status(401).send();
+        return;
+    }
+    if(req.params["email"]) {
+        User.removeFriendRequest(req.user.email, req.params["email"]);
+    }
+    res.status(200).send();
 });
 
 router.get("/friend/:id", (req, res) => {
@@ -45,7 +56,12 @@ router.post("/friend", (req, res) => {
         res.status(401).send();
         return;
     }
-    res.json(User.sendFriendRequest(req.user.email, req.body.email))
+    const i = User.sendFriendRequest(req.user.email, req.body.email);
+    if(i){
+        res.status(200).send();
+    }else{
+        res.status(404).send();
+    }
 });
 
 router.post("/friend/add", (req, res) => {

@@ -32,7 +32,6 @@ export class Chat extends React.Component {
                     return {messages: [...prev.messages, ...messages]}
                 }
             });
-            console.log(this.state.messages);
         });
     };
 
@@ -112,12 +111,19 @@ export class Chat extends React.Component {
         let messages = <div/>;
         if (this.state.messages !== null) {
             messages = <div>
-                {this.state.messages.map(m => {
+                {this.state.messages.map((m,i) => {
                     let name = m.emailFrom;
                     if(m.emailFrom===this.props.user.email){
                         name = this.props.user.email
                     }
-                    return <p key={"msg_key" + m.id+m.text}> {name + ": " + m.text}</p>
+                    return (
+                    <p key={m.id+name+i*3}>
+                        {name+": "}
+                        {this.handleText(m.text).map(k => {
+                            return k;
+                        })}
+                    </p>
+                    );
                 })
                 }
                 </div>;
@@ -125,6 +131,29 @@ export class Chat extends React.Component {
         return messages
     };
 
+
+    //https://stackoverflow.com/questions/1500260/detect-urls-in-text-with-javascript
+    handleText = (text) => {
+        const urlRegex = /(https?:\/\/[^\s]+)/g;
+        const newText = text.replace(urlRegex, (url) => {
+            return "<"+url+">";
+        }).trim();
+        const splittedStart = newText.split("<");
+        let fixedTextArr = [];
+        splittedStart.forEach(s => {
+            const arr = s.split(">");
+            arr.forEach(ss => {
+                if(ss.length>0) {
+                    if (ss.startsWith("http")) {
+                        fixedTextArr.push(<a key={ss+s} href={ss}>{ss}</a>)
+                    } else {
+                        fixedTextArr.push(ss)
+                    }
+                }
+            });
+        });
+        return fixedTextArr;
+    };
 
     render() {
         const user = this.props.user;

@@ -13,17 +13,21 @@ export class PostsList extends React.Component {
     }
 
     componentWillMount() {
-        if(this.props.user !== null){
+        if(this.props.user !== null && this.props.user !== undefined){
             this.updateEmail(this.props.user.email)
         }
     }
 
     componentDidMount() {
-        this.fetchPosts();
+        if(this.props.user !== null && this.props.user !== undefined) {
+            this.fetchPosts();
+        }
     }
 
     componentWillUnmount() {
-        this.socket.close();
+        if(this.socket) {
+            this.socket.close();
+        }
     }
 
     fetchPosts = () => {
@@ -41,12 +45,14 @@ export class PostsList extends React.Component {
     };
 
     sendMessage = (email) => {
-        const payload = JSON.stringify({email: email, title: this.state.title,text: this.state.text});
-        this.socket.send(payload);
-        this.setState({
-            title: "",
-            text: ""
-        });
+        if(this.state.title.length>0&&this.state.text.length>0) {
+            const payload = JSON.stringify({email: email, title: this.state.title, text: this.state.text});
+            this.socket.send(payload);
+            this.setState({
+                title: "",
+                text: ""
+            });
+        }
     };
 
     updateEmail = (email) => {
@@ -99,7 +105,7 @@ export class PostsList extends React.Component {
             posts = <div>
                 {this.state.posts.map((m,i) => {
                     return (
-                        <div className={"post_element"} key={"msg_key_ls" +(i*2%2)}>
+                        <div className={"post_element"} key={"msg_key_ls" +(i*2)}>
                             <p className={"post_title"}>{m.title}</p>
                             <p className={"post_email"}>{m.email}</p>
                             <p className={"post_text"}>{m.text}</p>
@@ -124,4 +130,4 @@ export class PostsList extends React.Component {
     }
 }
 
-export default withRouter(PostsList);
+export default PostsList;

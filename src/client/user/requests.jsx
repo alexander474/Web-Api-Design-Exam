@@ -32,6 +32,14 @@ export class Request extends React.Component {
         await this.props.fetchAndUpdateUserInfo();
     };
 
+    denyFriend = async (email) => {
+        await fetch("/api/friend/request/"+email, {
+            method: "delete",
+        });
+        await this.fetchRequests();
+        await this.props.fetchAndUpdateUserInfo();
+    };
+
 
     render() {
         const user = this.props.user;
@@ -42,7 +50,17 @@ export class Request extends React.Component {
                 <div>
                     <ul>
                         {this.state.requests.map((r,i) => {
-                           return <li key={"key_"+r+(i%2)}>{r} <div className={"btn friends_div_btn"} onClick={()=>this.addFriend(r)}>Add</div></li>
+                           return (
+                               <li key={"key_"+r+(i%2)}>
+                                   {r}
+                                   <div className={"btn friends_div_btn"} onClick={()=>this.addFriend(r)}>
+                                       Add
+                                   </div>
+                                   <div className={"btn friends_div_btn"} onClick={()=>this.denyFriend(r)}>
+                                       Deny
+                                   </div>
+                               </li>
+                           );
                         })}
                     </ul>
                 </div>

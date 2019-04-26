@@ -89,7 +89,7 @@ export class Header extends React.Component {
         return (
             <div className="msgDiv">
                 <div className="btnPartHeader">
-                    <p>Not logged in</p>
+                    <p className="notLoggedInText">Not logged in</p>
                     <Link className="btn" to="/login">
                         LogIn
                     </Link>

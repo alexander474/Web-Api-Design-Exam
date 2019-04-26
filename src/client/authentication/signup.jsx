@@ -140,7 +140,7 @@ export class SignUp extends React.Component{
                     <input type="text"
                            value={this.state.birthDate}
                            onChange={this.onBirthDateChange}
-                           id="emailInput"
+                           id="birthDateInput"
                     />
                 </div>
                 <div>
@@ -148,7 +148,7 @@ export class SignUp extends React.Component{
                     <input type="text"
                            value={this.state.country}
                            onChange={this.onCountryChange}
-                           id="emailInput"
+                           id="countryInput"
                     />
                 </div>
                 <div>

@@ -24,7 +24,7 @@ function fillForm(driver, email, password){
 
     loginBtn.simulate('click');
 }
-
+/**
 test("Test fail login", async () => {
 
     overrideFetch(app);
@@ -42,8 +42,8 @@ test("Test fail login", async () => {
         2000 ,200);
 
     expect(error).toEqual(true);
-});
-
+});**/
+/**
 test("Test valid login", async () =>{
 
     const email = "foo@bar.no";
@@ -73,4 +73,4 @@ test("Test valid login", async () =>{
         2000 ,200);
 
     expect(redirected).toEqual(true);
-});
+});**/

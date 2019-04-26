@@ -9,6 +9,7 @@ import SignUp from "./authentication/signup";
 import Header from "./header";
 import UserPage from "./user/userPage";
 import PrivateUserPage from "./user/privateUserPage";
+import EditUser from "./user/editUser";
 import Requests from "./user/requests";
 import Chat from "./chat/chat";
 
@@ -93,6 +94,10 @@ class App extends React.Component {
                                render={props => <UserPage {...props}
                                                           user={this.state.user}
                                                           fetchAndUpdateUserInfo={this.fetchAndUpdateUserInfo}/>}/>
+                        <Route exact path="/editUser/:id"
+                               render={props => <EditUser {...props}
+                                                                 user={this.state.user}
+                                                                 fetchAndUpdateUserInfo={this.fetchAndUpdateUserInfo}/>}/>
                         <Route exact path="/requests"
                                render={props => <Requests {...props}
                                                                  user={this.state.user}

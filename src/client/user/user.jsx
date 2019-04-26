@@ -17,6 +17,8 @@ export class User extends React.Component {
             },
             body: JSON.stringify(payload)
         });
+        this.props.callback();
+        this.props.history.push('/');
     };
 
     removeFriend = async (email) => {
@@ -43,6 +45,7 @@ export class User extends React.Component {
         const isMyProfile = email === this.props.loggedInUser.email;
         return(
             <div>
+                {isMyProfile?<Link className={"btn"} to={"/editUser/"+this.props.loggedInUser.id}>Edit</Link>:null}
                 {email !== null ? <p>Email: {email}</p> : null}
                 {birthDate !== null ? <p>Birth: {birthDate}</p> : null}
                 {country !== null ? <p>Country: {country}</p> : null}
@@ -96,4 +99,4 @@ export class User extends React.Component {
     };
 }
 
-export default withRouter(User);
+export default User;
